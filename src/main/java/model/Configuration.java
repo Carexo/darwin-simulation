@@ -1,6 +1,8 @@
 package model;
 
 public class Configuration {
+
+
     public enum MapType {
         EARTH_MAP ,
         OCEAN_MAP
