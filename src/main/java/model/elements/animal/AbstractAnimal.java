@@ -102,6 +102,9 @@ public abstract class AbstractAnimal implements WorldElement {
         energyLevel += configuration.getGrassEnergyLevel();
         eatenGrass++;
     }
+    public MapDirection getDirection() {
+        return direction;
+    }
 
     public boolean isAlive() {
         return energyLevel > 0;
