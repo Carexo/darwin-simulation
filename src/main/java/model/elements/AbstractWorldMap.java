@@ -1,6 +1,7 @@
 package model.elements;
 
 import model.Configuration;
+import model.MoveValidator;
 import model.elements.animal.Animal;
 
 import java.util.ArrayList;
@@ -60,6 +61,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         return elements;
     }
 
+    @Override
+    public int getId() {
+        return Id;
+    }
 
+    @Override
+    public void move(Animal animal) {
+        Vector2D currPosition = animal.getPosition();
+        animal.move( this);
+        animalList.remove(currPosition);
+        animalList.put(animal.getPosition(), animal);
+    }
 
 }
