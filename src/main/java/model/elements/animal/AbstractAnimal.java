@@ -135,4 +135,8 @@ public abstract class AbstractAnimal implements WorldElement {
     public Vector2D getPosition() {
         return position;
     }
+
+    public void setPosition(Vector2D newPosition) {
+        this.position = newPosition;
+    }
 }
