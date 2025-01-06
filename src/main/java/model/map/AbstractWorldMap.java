@@ -1,6 +1,7 @@
 package model.map;
 
 import model.Configuration;
+import model.MoveValidator;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.Animal;
@@ -81,11 +82,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public void move(Animal animal) {
         Vector2D currPosition = animal.getPosition();
-        animal.move( this);
+        animal.move((MoveValidator) this);
         animalList.remove(currPosition);
-        Vector2D position = animal.getPosition();
-        position = getNewPosition(position);
-        animal.setPosition(position);
         animalList.put(animal.getPosition(), animal);
     }
 
