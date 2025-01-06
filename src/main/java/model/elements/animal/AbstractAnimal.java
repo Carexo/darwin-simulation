@@ -1,7 +1,6 @@
 package model.elements.animal;
 
 import model.Configuration;
-import model.MoveValidator;
 import model.elements.MapDirection;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
