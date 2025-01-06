@@ -1,10 +1,12 @@
-package model.elements;
+package model.map;
 
 
-import model.MoveValidator;
+import model.elements.Vector2D;
+import model.elements.WorldElement;
 import model.elements.animal.Animal;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface WorldMap extends MoveValidator {
     /**
@@ -42,6 +44,6 @@ public interface WorldMap extends MoveValidator {
 
     List<WorldElement> getElements();
 
-    int getId();
+    UUID getId();
 }
 
