@@ -83,9 +83,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         Vector2D currPosition = animal.getPosition();
         animal.move( this);
         animalList.remove(currPosition);
-        Vector2D position = animal.getPosition();
-        position = getNewPosition(position);
-        animal.setPosition(position);
         animalList.put(animal.getPosition(), animal);
     }
 
