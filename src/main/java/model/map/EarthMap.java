@@ -7,8 +7,6 @@ import java.util.*;
 
 public class EarthMap extends AbstractWorldMap {
 
-    private List<Vector2D> plants = new ArrayList<>();
-
     public EarthMap(Configuration config) {
         super(config);
         int equatorHeight = this.height/6;
@@ -17,7 +15,7 @@ public class EarthMap extends AbstractWorldMap {
         List<Vector2D> preferable = new ArrayList<>();
         for(int i = 0; i<this.height; i++){
             for(int j = 0; j<this.width; j++){
-                if(i<=equator+equatorHeight || i>=equator-equatorHeight){
+                if(i<=equator+equatorHeight && i>=equator-equatorHeight){
                     preferable.add(new Vector2D(j,i));
                 }
                 else{
