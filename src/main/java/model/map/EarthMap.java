@@ -1,6 +1,7 @@
 package model.map;
 
 import model.Configuration;
+import model.elements.Plant;
 import model.elements.Vector2D;
 
 import java.util.*;
@@ -31,11 +32,13 @@ public class EarthMap extends AbstractWorldMap {
         for(int i = 0; i < super.grassCount; i++) {
             int chance = random.nextInt(5);
             if(chance == 0) {
-                plants.add(nonPreferable.get(np_ind));
+                Vector2D position = nonPreferable.get(np_ind);
+                plants.put(position, new Plant(position));
                 np_ind++;
             }
             else {
-                plants.add(preferable.get(p_ind));
+                Vector2D position = preferable.get(p_ind);
+                plants.put(position, new Plant(position));
                 p_ind++;
             }
         }
