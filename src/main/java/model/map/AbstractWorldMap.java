@@ -7,6 +7,7 @@ import model.elements.animal.AbstractAnimal;
 import model.util.MapVisualizer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
@@ -16,7 +17,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     List<MapChangeListener> listeners = new ArrayList<>();
     private final Boundary boundary;
     protected int grassCount;
-    private final Map<Vector2D, AbstractAnimal> animalList = new HashMap<>();
+    private final Map<Vector2D, List<AbstractAnimal>> animals = new HashMap<>();
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
 
 
@@ -27,6 +28,22 @@ public abstract class AbstractWorldMap implements WorldMap {
         grassCount = config.getStartingGrassCount();
     }
 
+    private void addAnimal(AbstractAnimal animal) {
+        Vector2D position = animal.getPosition();
+        List<AbstractAnimal> animalList = animals.computeIfAbsent(position, k -> new ArrayList<>());
+        animalList.add(animal);
+    }
+
+    private void removeAnimal(AbstractAnimal animal) {
+        Vector2D position = animal.getPosition();
+        List<AbstractAnimal> animalList = animals.get(position);
+        if (animalList != null) {
+            animalList.remove(animal);
+            if (animalList.isEmpty()) {
+                animals.remove(position);
+            }
+        }
+    }
 
     public void subscribe(MapChangeListener listener) {
         listeners.add(listener);
@@ -48,7 +65,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public Stream<WorldElement> objectsAt(Vector2D position) {
-       return animalList.keySet().stream().filter(animalPosition -> animalPosition.equals(position)).map(animalList::get);
+       return animals.keySet().stream().filter(position::equals).map(animals::get).flatMap(List::stream);
     }
 
     @Override
@@ -62,14 +79,14 @@ public abstract class AbstractWorldMap implements WorldMap {
             throw new IllegalArgumentException("Cannot place animal at " + animal.getPosition());
         };
 
-        animalList.put(animal.getPosition(), animal);
+        addAnimal(animal);
 
         notify("Animal" + animal.getAnimalName() + "was placed at " + animal.getPosition());
     }
 
     @Override
     public List<WorldElement> getElements() {
-        return new ArrayList<>(animalList.values());
+        return animals.values().stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
     @Override
@@ -80,13 +97,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public void move(AbstractAnimal animal) {
         Vector2D currPosition = animal.getPosition();
-        animal.move( this);
-        animalList.remove(currPosition);
-        Vector2D position = animal.getPosition();
 
-        position = getNewPosition(position);
-        animal.setPosition(position);
-        animalList.put(animal.getPosition(), animal);
+        removeAnimal(animal);
+        animal.move(this);
+        addAnimal(animal);
 
         notify("Animal " + animal.getAnimalName() + " moved from " + currPosition + " to " + animal.getPosition());
     }
