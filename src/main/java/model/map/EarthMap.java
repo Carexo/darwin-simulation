@@ -17,7 +17,7 @@ public class EarthMap extends AbstractWorldMap {
         List<Vector2D> preferable = new ArrayList<>();
         for(int i = 0; i<this.height; i++){
             for(int j = 0; j<this.width; j++){
-                if(i<=equator+equatorHeight || i>=equator-equatorHeight){
+                if(i<=equator+equatorHeight && i>=equator-equatorHeight){
                     preferable.add(new Vector2D(j,i));
                 }
                 else{
