@@ -3,10 +3,11 @@ package model.map;
 
 import model.elements.Vector2D;
 import model.elements.WorldElement;
-import model.elements.animal.Animal;
+import model.elements.animal.AbstractAnimal;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public interface WorldMap extends MoveValidator {
     /**
@@ -15,13 +16,13 @@ public interface WorldMap extends MoveValidator {
      * @param animal The animal to place on the map.
      * @return True if the animal was placed. The animal cannot be placed if the move is not valid.
      */
-    boolean place(Animal animal);
+    void place(AbstractAnimal animal);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.
      * If the move is not possible, this method has no effect.
      */
-    void move(Animal animal);
+    void move(AbstractAnimal animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -39,7 +40,7 @@ public interface WorldMap extends MoveValidator {
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    WorldElement objectAt(Vector2D position);
+    Stream<WorldElement> objectsAt(Vector2D position);
 
 
     List<WorldElement> getElements();

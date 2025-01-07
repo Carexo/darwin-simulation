@@ -2,7 +2,10 @@ package model.util;
 
 
 import model.elements.Vector2D;
+import model.elements.WorldElement;
 import model.map.WorldMap;
+
+import java.util.stream.Stream;
 
 /**
  * The map visualizer converts the {@link WorldMap} map into a string
@@ -76,10 +79,8 @@ public class MapVisualizer {
 
     private String drawObject(Vector2D currentPosition) {
         if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.objectAt(currentPosition);
-            if (object != null) {
-                return object.toString();
-            }
+            Stream<WorldElement> elements = this.map.objectsAt(currentPosition);
+            return elements.findFirst().map(Object::toString).orElse(EMPTY_CELL);
         }
         return EMPTY_CELL;
     }

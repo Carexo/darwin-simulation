@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static java.lang.Math.max;
 
 public abstract class AbstractAnimal implements WorldElement {
+    private final String animalName = String.format("%s",(char) ThreadLocalRandom.current().nextInt(65, 91));
     private Vector2D position;
     private MapDirection direction;
     private int energyLevel;
@@ -39,6 +40,10 @@ public abstract class AbstractAnimal implements WorldElement {
         placeAnimal(position, energyLevel);
     }
 
+    public String toString() {
+        return animalName;
+    }
+
     public void placeAnimal(Vector2D position, int energyLevel) {
         this.position = position;
         this.energyLevel = energyLevel;
@@ -60,7 +65,7 @@ public abstract class AbstractAnimal implements WorldElement {
         energyLevel -= configuration.getAnimalEnergyLossPerMove();
     }
 
-    public AbstractAnimal bread(AbstractAnimal other) {
+    public AbstractAnimal reproduce(AbstractAnimal other) {
         int side = ThreadLocalRandom.current().nextInt(0, 2);
 
         float genomePercent = max(energyLevel, other.energyLevel)/(float)(energyLevel + other.energyLevel);
@@ -122,7 +127,7 @@ public abstract class AbstractAnimal implements WorldElement {
         return energyLevel;
     }
 
-    public boolean getBread() {
+    public boolean canBread() {
         return energyLevel > configuration.getAnimalReadyToBreedEnergyLevel();
     }
 
@@ -138,5 +143,9 @@ public abstract class AbstractAnimal implements WorldElement {
 
     public void setPosition(Vector2D newPosition) {
         this.position = newPosition;
+    }
+
+    public String getAnimalName() {
+        return animalName;
     }
 }
