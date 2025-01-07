@@ -7,8 +7,6 @@ import java.util.*;
 
 public class EarthMap extends AbstractWorldMap {
 
-    private List<Vector2D> plants = new ArrayList<>();
-
     public EarthMap(Configuration config) {
         super(config);
         int equatorHeight = this.height/6;
