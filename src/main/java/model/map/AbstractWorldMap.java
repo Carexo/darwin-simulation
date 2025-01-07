@@ -12,6 +12,9 @@ import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected final UUID id = UUID.randomUUID();
+
+    protected final List<Vector2D> plants = new ArrayList<>();
+
     protected final int width;
     protected final int height;
     List<MapChangeListener> listeners = new ArrayList<>();
