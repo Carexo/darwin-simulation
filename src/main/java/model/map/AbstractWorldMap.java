@@ -1,6 +1,7 @@
 package model.map;
 
 import model.Configuration;
+import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
@@ -13,8 +14,7 @@ import java.util.stream.Stream;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final UUID id = UUID.randomUUID();
 
-    protected final List<Vector2D> plants = new ArrayList<>();
-
+    protected final Map<Vector2D, Plant> plants = new HashMap<>();
     protected final int width;
     protected final int height;
     List<MapChangeListener> listeners = new ArrayList<>();
@@ -68,7 +68,11 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public Stream<WorldElement> objectsAt(Vector2D position) {
-       return animals.keySet().stream().filter(position::equals).map(animals::get).flatMap(List::stream);
+        return Stream.concat(
+                animals.keySet().stream().filter(position::equals).map(animals::get).flatMap(List::stream),
+                plants.keySet().stream().filter(position::equals).map(plants::get)
+        );
+
     }
 
     @Override

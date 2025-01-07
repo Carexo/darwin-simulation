@@ -1,6 +1,7 @@
 package model;
 
 import model.elements.Vector2D;
+import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
 import model.elements.animal.Animal;
 import model.map.AbstractWorldMap;
@@ -53,7 +54,7 @@ public class Simulation {
         List<Vector2D> animalsPosition = animals.stream().map(AbstractAnimal::getPosition).toList();
 
         for (Vector2D animalPosition: animalsPosition) {
-            List<AbstractAnimal> canBreadAnimals = map.objectsAt(animalPosition).map(AbstractAnimal.class::cast).filter(AbstractAnimal::canBread).toList();
+            List<AbstractAnimal> canBreadAnimals = map.objectsAt(animalPosition).filter(AbstractAnimal.class::isInstance).map(AbstractAnimal.class::cast).filter(AbstractAnimal::canBread).toList();
             for (int i = 1; i < canBreadAnimals.size(); i += 2) {
                 AbstractAnimal parent1 = canBreadAnimals.get(i);
                 AbstractAnimal parent2 = canBreadAnimals.get(i - 1);
