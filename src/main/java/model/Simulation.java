@@ -1,5 +1,6 @@
 package model;
 
+import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.animal.AbstractAnimal;
 import model.elements.animal.Animal;
@@ -36,6 +37,7 @@ public class Simulation {
         while (SimulationCanRun()) {
             moveAnimals();
             breadAnimals();
+            this.map.growPlants();
         }
     }
 
@@ -65,4 +67,6 @@ public class Simulation {
         }
 
     }
+
+
 }

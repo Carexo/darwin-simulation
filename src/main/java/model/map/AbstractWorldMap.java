@@ -1,6 +1,7 @@
 package model.map;
 
 import model.Configuration;
+import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
@@ -13,13 +14,15 @@ import java.util.stream.Stream;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final UUID id = UUID.randomUUID();
 
-    protected final List<Vector2D> plants = new ArrayList<>();
+    protected final Map<Vector2D, Plant> plants = new HashMap<>();
+    protected int freePlantSpaces;
 
     protected final int width;
     protected final int height;
     List<MapChangeListener> listeners = new ArrayList<>();
     private final Boundary boundary;
     protected int grassCount;
+    protected int grassGrowthPerDay;
     private final Map<Vector2D, List<AbstractAnimal>> animals = new HashMap<>();
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
 
@@ -29,6 +32,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         height = config.getMapHeight();
         boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         grassCount = config.getStartingGrassCount();
+        grassGrowthPerDay = config.getGrassGrowthPerDay();
     }
 
     private void addAnimal(AbstractAnimal animal) {
@@ -46,6 +50,9 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.remove(position);
             }
         }
+    }
+    private void removePlant(Plant plant) {
+        plants.remove(plant.getPosition());
     }
 
     public void subscribe(MapChangeListener listener) {
@@ -116,5 +123,19 @@ public abstract class AbstractWorldMap implements WorldMap {
     public Boundary getMapBoundary() {
         return boundary;
     }
+
+    public Map<Vector2D, Plant> getPlants() {
+        return this.plants;
+    }
+
+    public void updateFreePlantSpaces() {
+        this.freePlantSpaces = this.width * this.height - this.plants.size();
+    }
+
+    public int getFreePlantSpaces() {
+        return this.freePlantSpaces;
+    }
+
+    public abstract void growPlants();
 
 }
