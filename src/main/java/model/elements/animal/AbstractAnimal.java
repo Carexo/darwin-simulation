@@ -18,7 +18,7 @@ public abstract class AbstractAnimal implements WorldElement {
     private MapDirection direction;
     private int energyLevel;
     private int eatenGrass = 0;
-    private final Genom genome;
+    private final Genome genome;
     private final Configuration configuration;
     private final List<AbstractAnimal> children;
     private int diedAt = -1;
@@ -26,13 +26,13 @@ public abstract class AbstractAnimal implements WorldElement {
     public AbstractAnimal(Vector2D position, int energyLevel, Configuration configuration) {
         this.children = new ArrayList<>();
         this.configuration = configuration;
-        this.genome = Genom.RandomGenome(configuration.getGenomeLength());
+        this.genome = Genome.RandomGenome(configuration.getGenomeLength());
 
         placeAnimal(position, energyLevel);
 
     }
 
-    public AbstractAnimal(Vector2D position, int energyLevel, Genom genome, Configuration configuration) {
+    public AbstractAnimal(Vector2D position, int energyLevel, Genome genome, Configuration configuration) {
         this.children = new ArrayList<>();
         this.configuration = configuration;
         this.genome = genome;
@@ -70,7 +70,7 @@ public abstract class AbstractAnimal implements WorldElement {
 
         float genomePercent = max(energyLevel, other.energyLevel)/(float)(energyLevel + other.energyLevel);
 
-        Genom childGenome = generateChildGenome(other, side, genomePercent);
+        Genome childGenome = generateChildGenome(other, side, genomePercent);
 
         energyLevel -= configuration.getAnimalEnergyGivenToChild();
         other.energyLevel -= configuration.getAnimalEnergyGivenToChild();
@@ -81,16 +81,16 @@ public abstract class AbstractAnimal implements WorldElement {
         return child;
     }
 
-    private Genom generateChildGenome(AbstractAnimal other, int side, float genomePercent) {
-        Genom strongGenom = energyLevel > other.energyLevel ? genome : other.genome;
-        Genom weakGenom = energyLevel < other.energyLevel ? genome: other.genome;
+    private Genome generateChildGenome(AbstractAnimal other, int side, float genomePercent) {
+        Genome strongGenome = energyLevel > other.energyLevel ? genome : other.genome;
+        Genome weakGenome = energyLevel < other.energyLevel ? genome: other.genome;
 
-        Genom childGenome;
+        Genome childGenome;
 
         if (side == 0) {
-            childGenome = strongGenom.combineGenomes(weakGenom, genomePercent);
+            childGenome = strongGenome.combineGenomes(weakGenome, genomePercent);
         } else {
-            childGenome = weakGenom.combineGenomes(strongGenom, genomePercent);
+            childGenome = weakGenome.combineGenomes(strongGenome, genomePercent);
         }
 
         childGenome.mutate(configuration.getMinimalMutationsCount(), configuration.getMaximalMutationsCount());
@@ -101,6 +101,10 @@ public abstract class AbstractAnimal implements WorldElement {
     public void die(int day) {
         energyLevel = 0;
         diedAt = day;
+    }
+
+    public void setDiedAt(int diedAt) {
+        this.diedAt = diedAt;
     }
 
     public void eat() {

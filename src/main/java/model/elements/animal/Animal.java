@@ -8,7 +8,7 @@ public class Animal extends AbstractAnimal{
         super(position, energyLevel, configuration);
     }
 
-    public Animal(Vector2D position, int energyLevel, Genom genome, Configuration configuration) {
+    public Animal(Vector2D position, int energyLevel, Genome genome, Configuration configuration) {
         super(position, energyLevel, genome, configuration);
     }
 }
