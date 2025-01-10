@@ -42,9 +42,6 @@ public interface WorldMap extends MoveValidator {
      */
     Stream<WorldElement> objectsAt(Vector2D position);
 
-
-    List<WorldElement> getElements();
-
     UUID getId();
 }
 

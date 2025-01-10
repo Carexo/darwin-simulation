@@ -8,7 +8,6 @@ import model.elements.animal.AbstractAnimal;
 import model.util.MapVisualizer;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
@@ -62,6 +61,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
+
+    public void remove(WorldElement element) {
+        if (element instanceof AbstractAnimal) {
+            removeAnimal((AbstractAnimal) element);
+            notify("Animal " + element + " was removed from the map");
+        } else if (element instanceof Plant) {
+            plants.remove(element.getPosition());
+            notify("Plant " + element + " was removed from the map");
+        }
+    }
+
     public String toString() {
         return mapVisualizer.draw(boundary.lowerLeft(), boundary.upperRight());
     }
@@ -91,9 +101,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         notify("Animal" + animal.getAnimalName() + "was placed at " + animal.getPosition());
     }
 
-    @Override
-    public List<WorldElement> getElements() {
-        return animals.values().stream().flatMap(List::stream).collect(Collectors.toList());
+
+    public Map<Vector2D, List<AbstractAnimal>> getAnimals() {
+        return animals;
+    }
+
+    public List<AbstractAnimal> getAnimalsList() {
+        return animals.values().stream().flatMap(List::stream).toList();
+    }
+
+    public Map<Vector2D, Plant> getPlants() {
+        return plants;
     }
 
     @Override
@@ -106,10 +124,12 @@ public abstract class AbstractWorldMap implements WorldMap {
         Vector2D currPosition = animal.getPosition();
 
         removeAnimal(animal);
+
         animal.move(this);
+
         addAnimal(animal);
 
-        notify("Animal " + animal.getAnimalName() + " moved from " + currPosition + " to " + animal.getPosition());
+        notify("Animal " + animal.getAnimalName() + " " + animal.getEnergyLevel() + " moved from " + currPosition + " to " + animal.getPosition());
     }
 
     @Override

@@ -21,6 +21,7 @@ public abstract class AbstractAnimal implements WorldElement {
     private final Genome genome;
     private final Configuration configuration;
     private final List<AbstractAnimal> children;
+    private int age = 1;
     private int diedAt = -1;
 
     public AbstractAnimal(Vector2D position, int energyLevel, Configuration configuration) {
@@ -111,24 +112,17 @@ public abstract class AbstractAnimal implements WorldElement {
         energyLevel += configuration.getGrassEnergyLevel();
         eatenGrass++;
     }
+
+    public void aging() {
+        age++;
+    }
+
     public MapDirection getDirection() {
         return direction;
     }
 
     public boolean isAlive() {
         return energyLevel > 0;
-    }
-
-    public int getChildrenCount() {
-        return children.size();
-    }
-
-    public int getEatenGrass() {
-        return eatenGrass;
-    }
-
-    public int getEnergyLevel() {
-        return energyLevel;
     }
 
     public boolean canBread() {
@@ -145,11 +139,23 @@ public abstract class AbstractAnimal implements WorldElement {
         return position;
     }
 
-    public void setPosition(Vector2D newPosition) {
-        this.position = newPosition;
+    public int getChildrenCount() {
+        return children.size();
+    }
+
+    public int getEatenGrass() {
+    return eatenGrass;
+}
+
+    public int getEnergyLevel() {
+        return energyLevel;
     }
 
     public String getAnimalName() {
         return animalName;
+    }
+
+    public int getAge() {
+        return age;
     }
 }
