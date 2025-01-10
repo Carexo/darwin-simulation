@@ -14,13 +14,13 @@ public class Configuration {
     }
 
     private MapType mapType = MapType.EARTH_MAP;
-    private int mapWidth = 10;
-    private int mapHeight = 10;
+    private int mapWidth = 6;
+    private int mapHeight = 6;
     private int startingGrassCount = 10;
     private int grassGrowthPerDay = 1;
     private int grassEnergyLevel = 5;
-    private int startingAnimalsCount = 5;
-    private int animalStartingEnergy = 1;
+    private int startingAnimalsCount = 2;
+    private int animalStartingEnergy = 2;
     private int animalEnergyLossPerMove = 1;
     private int animalReadyToBreedEnergyLevel = 50;
     private int animalEnergyGivenToChild = 20;

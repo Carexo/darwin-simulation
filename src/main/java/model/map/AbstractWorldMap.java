@@ -4,11 +4,10 @@ import model.Configuration;
 import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
-import model.elements.animal.AbstractAnimal;
+import model.elements.animal.Animal;
 import model.util.MapVisualizer;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
@@ -20,7 +19,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     List<MapChangeListener> listeners = new ArrayList<>();
     private final Boundary boundary;
     protected int grassCount;
-    private final Map<Vector2D, List<AbstractAnimal>> animals = new HashMap<>();
+    private final Map<Vector2D, List<Animal>> animals = new HashMap<>();
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
 
 
@@ -31,15 +30,15 @@ public abstract class AbstractWorldMap implements WorldMap {
         grassCount = config.getStartingGrassCount();
     }
 
-    private void addAnimal(AbstractAnimal animal) {
+    private void addAnimal(Animal animal) {
         Vector2D position = animal.getPosition();
-        List<AbstractAnimal> animalList = animals.computeIfAbsent(position, k -> new ArrayList<>());
+        List<Animal> animalList = animals.computeIfAbsent(position, k -> new ArrayList<>());
         animalList.add(animal);
     }
 
-    private void removeAnimal(AbstractAnimal animal) {
+    private void removeAnimal(Animal animal) {
         Vector2D position = animal.getPosition();
-        List<AbstractAnimal> animalList = animals.get(position);
+        List<Animal> animalList = animals.get(position);
         if (animalList != null) {
             animalList.remove(animal);
             if (animalList.isEmpty()) {
@@ -62,6 +61,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
+
+    public void remove(WorldElement element) {
+        if (element instanceof Animal) {
+            removeAnimal((Animal) element);
+            notify("Animal " + element + " was removed from the map");
+        } else if (element instanceof Plant) {
+            plants.remove(element.getPosition());
+            notify("Plant " + element + " was removed from the map");
+        }
+    }
+
     public String toString() {
         return mapVisualizer.draw(boundary.lowerLeft(), boundary.upperRight());
     }
@@ -81,7 +91,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void place(AbstractAnimal animal) {
+    public void place(Animal animal) {
         if(!canMoveTo(animal.getPosition())){
             throw new IllegalArgumentException("Cannot place animal at " + animal.getPosition());
         };
@@ -91,9 +101,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         notify("Animal" + animal.getAnimalName() + "was placed at " + animal.getPosition());
     }
 
-    @Override
-    public List<WorldElement> getElements() {
-        return animals.values().stream().flatMap(List::stream).collect(Collectors.toList());
+
+    public Map<Vector2D, List<Animal>> getAnimals() {
+        return animals;
+    }
+
+    public List<Animal> getAnimalsList() {
+        return animals.values().stream().flatMap(List::stream).toList();
+    }
+
+    public Map<Vector2D, Plant> getPlants() {
+        return plants;
     }
 
     @Override
@@ -102,14 +120,16 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void move(AbstractAnimal animal) {
+    public void move(Animal animal) {
         Vector2D currPosition = animal.getPosition();
 
         removeAnimal(animal);
+
         animal.move(this);
+
         addAnimal(animal);
 
-        notify("Animal " + animal.getAnimalName() + " moved from " + currPosition + " to " + animal.getPosition());
+        notify("Animal " + animal.getAnimalName() + " " + animal.getEnergyLevel() + " moved from " + currPosition + " to " + animal.getPosition());
     }
 
     @Override
