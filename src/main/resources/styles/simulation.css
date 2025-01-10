@@ -1,0 +1,9 @@
+.grid-map {
+    -fx-alignment: center;
+}
+
+.info-move {
+    -fx-padding: 16;
+    -fx-alignment: center;
+    -fx-font-size: 20;
+}
