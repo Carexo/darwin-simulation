@@ -11,15 +11,13 @@ import model.util.RandomPositionGenerator;
 
 import java.util.*;
 
-public class Simulation {
+public class Simulation implements Runnable {
     private int dayNumber = 1;
     private final AbstractWorldMap map;
     private final Configuration configuration;
 
     public Simulation(AbstractWorldMap map, Configuration configuration) {
-        ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
         this.map = map;
-        this.map.subscribe(consoleMapDisplay);
         this.configuration = configuration;
 
 
@@ -42,6 +40,12 @@ public class Simulation {
             breadAnimals();
             // TODO: growPlants();
             agingAnimals();
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
