@@ -141,4 +141,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         return boundary;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 }
