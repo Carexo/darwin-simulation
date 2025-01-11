@@ -52,9 +52,14 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
     public void move(MoveValidator moveValidator) {
+//        System.out.println(position);
+
         this.direction = direction.shift(genome.getActiveGene());
         Vector2D newPosition = moveValidator.getNewPosition(position.add(direction.toUnitVector()));
 
+//
+//        System.out.println(newPosition);
+//        System.out.println(direction);
 
         if (moveValidator.canMoveTo(newPosition)) {
             position = newPosition;

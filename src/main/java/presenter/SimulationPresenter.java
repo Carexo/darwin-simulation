@@ -61,8 +61,8 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void yLabel() {
-        for (int i = 0; i < map.getHeight(); i++) {
-            Label label = new Label(Integer.toString(i ));
+        for (int i = map.getHeight() - 1; i >= 0; i--) {
+            Label label = new Label(Integer.toString(map.getHeight() - i - 1));
             GridPane.setHalignment(label, HPos.CENTER);
             mapGrid.getRowConstraints().add(new RowConstraints(30));
             mapGrid.add(label, 0, i + 1);
@@ -71,19 +71,20 @@ public class SimulationPresenter implements MapChangeListener {
 
     private void drawElements() {
         for (int i = 0; i < map.getWidth(); i++) {
-            for (int j =0; j < map.getHeight() - 1; j++) {
+            for (int j = map.getHeight() - 1; j >= 0; j--) {
                 Vector2D position = new Vector2D(i, j);
                 if (map.isOccupied(position)) {
                     WorldElement element = map.objectsAt(position).toList().getFirst();
-                    mapGrid.add(new Label(element.toString()), i + 1, j + 1);
+                    mapGrid.add(new Label(element.toString()), i + 1,  map.getHeight() - j);
                 } else {
-                    mapGrid.add(new Label(" "), i + 1, j + 1);
+                    mapGrid.add(new Label(" "), i + 1, map.getHeight() - j);
                 }
 
                 GridPane.setHalignment(mapGrid.getChildren().getLast(), HPos.CENTER);
             }
         }
     }
+
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst()); // hack to retain visible grid lines

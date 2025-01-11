@@ -21,6 +21,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int grassCount;
     private final Map<Vector2D, List<AbstractAnimal>> animals = new HashMap<>();
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
+    protected int freePlantSpaces;
+    protected int grassGrowthPerDay;
 
 
     public AbstractWorldMap(Configuration config) {
@@ -28,6 +30,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         height = config.getMapHeight();
         boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         grassCount = config.getStartingGrassCount();
+        grassGrowthPerDay = config.getGrassGrowthPerDay();
     }
 
     private void addAnimal(AbstractAnimal animal) {
@@ -61,15 +64,18 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-
     public void remove(WorldElement element) {
         if (element instanceof AbstractAnimal) {
             removeAnimal((AbstractAnimal) element);
             notify("Animal " + element + " was removed from the map");
         } else if (element instanceof Plant) {
-            plants.remove(element.getPosition());
+            removePlant((Plant) element);
             notify("Plant " + element + " was removed from the map");
         }
+    }
+
+    private void removePlant(Plant plant) {
+        plants.remove(plant.getPosition());
     }
 
     public String toString() {
@@ -132,6 +138,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         notify("Animal " + animal.getAnimalName() + " " + animal.getEnergyLevel() + " moved from " + currPosition + " to " + animal.getPosition());
     }
 
+
+    public void updateFreePlantSpaces() {
+        this.freePlantSpaces = this.width * this.height - this.plants.size();
+    }
+
+    public int getFreePlantSpaces() {
+        return this.freePlantSpaces;
+    }
+
+    public abstract void growPlants();
+
     @Override
     public Vector2D getNewPosition(Vector2D position) {
         return position;
@@ -148,4 +165,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     public int getWidth() {
         return width;
     }
+
+
 }

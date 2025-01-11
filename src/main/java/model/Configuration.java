@@ -20,7 +20,7 @@ public class Configuration {
     private int grassGrowthPerDay = 1;
     private int grassEnergyLevel = 5;
     private int startingAnimalsCount = 2;
-    private int animalStartingEnergy = 2;
+    private int animalStartingEnergy = 200;
     private int animalEnergyLossPerMove = 1;
     private int animalReadyToBreedEnergyLevel = 50;
     private int animalEnergyGivenToChild = 20;
