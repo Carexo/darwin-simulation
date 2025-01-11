@@ -6,13 +6,12 @@ import model.elements.animal.AbstractAnimal;
 import model.elements.animal.Animal;
 import model.map.AbstractWorldMap;
 import model.util.AnimalUtils;
-import model.util.ConsoleMapDisplay;
 import model.util.RandomPositionGenerator;
 
 import java.util.*;
 
 public class Simulation implements Runnable {
-    private int dayNumber = 1;
+    private int dayNumber = 0;
     private final AbstractWorldMap map;
     private final Configuration configuration;
 
@@ -38,7 +37,7 @@ public class Simulation implements Runnable {
             moveAnimals();
             animalEats();
             breadAnimals();
-            // TODO: growPlants();
+            map.growPlants();
             agingAnimals();
 
             try {
