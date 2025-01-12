@@ -102,20 +102,19 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
 
-    public void onSimulationStartClicked(ActionEvent actionEvent) {
-        Configuration config = new Configuration();
-        EarthMap map = new EarthMap(config);
 
-        Simulation simulation = new Simulation(map, config);
-
+    public void init(AbstractWorldMap map, Simulation simulation) {
         setWorldMap(map);
 
-        map.subscribe(new ConsoleMapDisplay());
+//        map.subscribe(new ConsoleMapDisplay());
 
         map.subscribe(this);
 
-        engine = new SimulationEngine(List.of(simulation));
+    }
 
-        new Thread(engine::runAsyncInThreadPool).start();
+    public void onSimulationStartClicked(ActionEvent actionEvent) {
+    }
+
+    public void onSimulationPauseClicked(ActionEvent actionEvent) {
     }
 }

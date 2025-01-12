@@ -1,8 +1,10 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import presenter.ConfigurationSimulationPresenter;
 import presenter.SimulationPresenter;
 
 public class SimulationApp extends Application {
@@ -10,11 +12,19 @@ public class SimulationApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("views/simulation.fxml"));
+        loader.setLocation(getClass().getClassLoader().getResource("views/configurationSimulation.fxml"));
         BorderPane viewRoot = loader.load();
 
         configureStage(primaryStage, viewRoot);
         primaryStage.show();
+
+        ConfigurationSimulationPresenter presenter = loader.getController();
+
+        primaryStage.setOnCloseRequest(event -> {
+            presenter.onConfigurationSimulationApplicationClose();
+
+            Platform.exit();
+        });
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {

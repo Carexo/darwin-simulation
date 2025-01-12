@@ -19,6 +19,9 @@
         <GridPane fx:id="mapGrid" gridLinesVisible="true" styleClass="grid-map"/>
     </center>
     <bottom>
-        <Button text="Start" onAction="#onSimulationStartClicked"/>
+        <VBox>
+            <Button text="Start" onAction="#onSimulationStartClicked"/>
+            <Button text="Pause" onAction="#onSimulationPauseClicked"/>
+        </VBox>
     </bottom>
 </BorderPane>

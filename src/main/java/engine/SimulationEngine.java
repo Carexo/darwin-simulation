@@ -1,49 +1,45 @@
 package engine;
 
 import model.Simulation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
+import java.util.*;
+
 
 public class SimulationEngine {
-    private final List<Simulation> simulations;
-    private final List<Thread> simulationThreads = new ArrayList<>();
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(4);
+    private final Map<UUID, Thread> threads = new HashMap<>();
 
-    public SimulationEngine(List<Simulation> simulations) {
-        this.simulations = simulations;
+
+    public SimulationEngine() {
     }
 
     public void awaitSimulationsEnd() {
         try {
-            for (Thread thread : simulationThreads) {
+            for (Thread thread : threads.values()) {
+                if (!thread.isAlive()) {
+                    continue;
+                }
+
                 thread.join();
             }
 
-            threadPool.shutdown();
-
-
-            if (!threadPool.awaitTermination(2, TimeUnit.SECONDS)) {
-                threadPool.shutdownNow();
-                System.err.println("Not all simulations finished in 10 secunds");
-            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void runAsyncInThreadPool() {
-        for (Simulation simulation : simulations) {
-            threadPool.submit(simulation);
-        }
 
-        awaitSimulationsEnd();
+    public void addSimulation(Simulation simulation) {
+        Thread thread = new Thread(simulation);
+        threads.put(simulation.getSimulationId(), thread);
+        thread.start();
     }
 
-    public void interruptAllSimulations() {
-        threadPool.shutdown();
+    public void stopAllSimulations() {
+        threads.values().forEach(Thread::interrupt);
+    }
+
+    public void stopSingleSimulation(Simulation simulation) {
+        threads.get(simulation.getSimulationId()).interrupt();
     }
 }

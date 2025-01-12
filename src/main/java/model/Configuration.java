@@ -1,16 +1,35 @@
 package model;
 
+import model.elements.animal.Animal;
+import model.map.AbstractWorldMap;
+
 public class Configuration {
 
+
+    public AnimalType getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(AnimalType animalType) {
+        this.animalType = animalType;
+    }
+
+    public int getSimulationSpeed() {
+        return simulationSpeed;
+    }
+
+    public void setSimulationSpeed(int simulationSpeed) {
+        this.simulationSpeed = simulationSpeed;
+    }
 
     public enum MapType {
         EARTH_MAP ,
         OCEAN_MAP
     }
 
-    public enum GenomeBehaviour {
-        FULL_PREDESTINATION,
-        OLD
+    public enum AnimalType {
+        NORMAL,
+        AGING
     }
 
     private MapType mapType = MapType.EARTH_MAP;
@@ -20,20 +39,27 @@ public class Configuration {
     private int grassGrowthPerDay = 1;
     private int grassEnergyLevel = 5;
     private int startingAnimalsCount = 2;
-    private int animalStartingEnergy = 200;
+    private int animalStartingEnergy = 5;
     private int animalEnergyLossPerMove = 1;
     private int animalReadyToBreedEnergyLevel = 50;
     private int animalEnergyGivenToChild = 20;
-    private GenomeBehaviour genomeBehaviour = GenomeBehaviour.FULL_PREDESTINATION;
+    private AnimalType animalType = AnimalType.NORMAL;
     private int genomeLength = 8;
     private int minimalMutationsCount = 1;
     private int maximalMutationsCount = 3;
     private int startingOceanCount = 3;
     private int maxOceanSize = 5;
     private int oceanChangeRate = 10;
-    private int millisecondsPerSimulationDay = 500;
+    private int simulationSpeed = 500;
     private int totalSimulationDays = Integer.MAX_VALUE;
     private double chanceOfAnimalSkipMove = 0.1;
+
+    public AbstractWorldMap getSelectedMap() {
+        return switch(mapType){
+            case EARTH_MAP -> new model.map.EarthMap(this);
+            case OCEAN_MAP -> new model.map.EarthMap(this);
+        };
+    }
 
     public double getChanceOfAnimalSkipMove() {
         return chanceOfAnimalSkipMove;
@@ -131,13 +157,6 @@ public class Configuration {
         this.animalEnergyGivenToChild = animalEnergyGivenToChild;
     }
 
-    public GenomeBehaviour getGenomeBehaviour() {
-        return genomeBehaviour;
-    }
-
-    public void setGenomeBehaviour(GenomeBehaviour genomeBehaviour) {
-        this.genomeBehaviour = genomeBehaviour;
-    }
 
     public int getGenomeLength() {
         return genomeLength;
@@ -187,13 +206,6 @@ public class Configuration {
         this.oceanChangeRate = oceanChangeRate;
     }
 
-    public int getMillisecondsPerSimulationDay() {
-        return millisecondsPerSimulationDay;
-    }
-
-    public void setMillisecondsPerSimulationDay(int millisecondsPerSimulationDay) {
-        this.millisecondsPerSimulationDay = millisecondsPerSimulationDay;
-    }
 
     public int getTotalSimulationDays() {
         return totalSimulationDays;
