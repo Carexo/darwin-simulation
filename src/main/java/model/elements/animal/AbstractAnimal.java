@@ -19,7 +19,7 @@ public abstract class AbstractAnimal implements WorldElement {
     private int energyLevel;
     private int eatenGrass = 0;
     private final Genome genome;
-    private final Configuration configuration;
+    protected final Configuration configuration;
     private final List<AbstractAnimal> children;
     private int age = 1;
     private int diedAt = -1;
@@ -52,14 +52,9 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
     public void move(MoveValidator moveValidator) {
-//        System.out.println(position);
-
         this.direction = direction.shift(genome.getActiveGene());
         Vector2D newPosition = moveValidator.getNewPosition(position.add(direction.toUnitVector()));
 
-//
-//        System.out.println(newPosition);
-//        System.out.println(direction);
 
         if (moveValidator.canMoveTo(newPosition)) {
             position = newPosition;

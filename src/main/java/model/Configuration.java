@@ -33,6 +33,15 @@ public class Configuration {
     private int oceanChangeRate = 10;
     private int millisecondsPerSimulationDay = 500;
     private int totalSimulationDays = Integer.MAX_VALUE;
+    private double chanceOfAnimalSkipMove = 0.1;
+
+    public double getChanceOfAnimalSkipMove() {
+        return chanceOfAnimalSkipMove;
+    }
+
+    public void setChanceOfAnimalSkipMove(double chanceOfAnimalSkipMove) {
+        this.chanceOfAnimalSkipMove = chanceOfAnimalSkipMove;
+    }
 
     public MapType getMapType() {
         return mapType;

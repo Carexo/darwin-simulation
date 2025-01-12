@@ -67,6 +67,10 @@ public class Genome {
         return activeGene;
     }
 
+    public List<Gene> getGenes() {
+        return genes;
+    }
+
     @Override
     public String toString() {
         return genes.stream()
