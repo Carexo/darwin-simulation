@@ -77,18 +77,14 @@ public class EarthMap extends AbstractWorldMap {
 
     @Override
     public void growPlants() {
-        System.out.println("Growing plants");
 
         for(int i = 0; i < min(super.grassGrowthPerDay, this.getFreePlantSpaces()); i++) {
-            System.out.println("for loop");
             int chance = ThreadLocalRandom.current().nextInt(5);
             if (chance == 0) {
                 plants.put(nonPreferable.getFirst(), new EarthPlant(nonPreferable.getFirst(), false));
-                System.out.println(nonPreferable.getFirst());
                 nonPreferable.remove(nonPreferable.getFirst());
             } else {
                 plants.put(preferable.getFirst(), new EarthPlant(preferable.getFirst(), true));
-                System.out.println(preferable.getFirst());
                 preferable.remove(preferable.getFirst());
             }
         }

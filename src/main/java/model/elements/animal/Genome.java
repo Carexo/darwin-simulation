@@ -63,10 +63,6 @@ public class Genome {
         return genes.get(activeGene);
     }
 
-    public int getActiveGeneIndex() {
-        return activeGene;
-    }
-
     public List<Gene> getGenes() {
         return genes;
     }

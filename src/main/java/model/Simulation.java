@@ -3,6 +3,7 @@ package model;
 import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.animal.AbstractAnimal;
+import model.elements.animal.AgingAnimal;
 import model.elements.animal.Animal;
 import model.map.AbstractWorldMap;
 import model.util.AnimalUtils;
@@ -11,6 +12,7 @@ import model.util.RandomPositionGenerator;
 import java.util.*;
 
 public class Simulation implements Runnable {
+    private final UUID simulationId = UUID.randomUUID();
     private int dayNumber = 0;
     private final AbstractWorldMap map;
     private final Configuration configuration;
@@ -22,29 +24,35 @@ public class Simulation implements Runnable {
 
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount());
 
+        System.out.println(configuration.getAnimalType());
         for (Vector2D position: randomPositionGenerator) {
-            Animal animal = new Animal(position, configuration.getAnimalStartingEnergy(), configuration);
-            map.place(animal);
+            if (configuration.getAnimalType() == Configuration.AnimalType.AGING) {
+                AbstractAnimal animal = new AgingAnimal(position, configuration.getAnimalStartingEnergy(), configuration);
+                map.place(animal);
+            } else if (configuration.getAnimalType() == Configuration.AnimalType.NORMAL) {
+                AbstractAnimal animal = new Animal(position, configuration.getAnimalStartingEnergy(), configuration);
+                map.place(animal);
+            }
         }
     }
 
 
     public void run() {
-        while (SimulationCanRun()) {
-            dayNumber++;
+        try {
+            while (SimulationCanRun()) {
+                dayNumber++;
 
-            removeDeathAnimal();
-            moveAnimals();
-            animalEats();
-            breadAnimals();
-            map.growPlants();
-            agingAnimals();
+                removeDeathAnimal();
+                moveAnimals();
+                animalEats();
+                breadAnimals();
+                map.growPlants();
+                agingAnimals();
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.sleep(configuration.getSimulationSpeed());
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -98,5 +106,9 @@ public class Simulation implements Runnable {
                 map.place(child);
             }
         }
+    }
+
+    public UUID getSimulationId() {
+        return simulationId;
     }
 }
