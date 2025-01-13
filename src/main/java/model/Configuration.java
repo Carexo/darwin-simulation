@@ -1,6 +1,6 @@
 package model;
 
-import model.elements.TidesMap;
+import model.map.TidesMap;
 import model.map.AbstractWorldMap;
 import model.map.EarthMap;
 
@@ -33,7 +33,7 @@ public class Configuration {
         AGING
     }
 
-    private MapType mapType = MapType.EARTH_MAP;
+    private MapType mapType = MapType.OCEAN_MAP;
     private int mapWidth = 6;
     private int mapHeight = 6;
     private int startingGrassCount = 10;
