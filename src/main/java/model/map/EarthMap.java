@@ -68,11 +68,10 @@ public class EarthMap extends AbstractWorldMap {
         if (plants.containsValue(plant)) {
             plants.remove(plant.getPosition());
             if (plant.isPreferredPosition()) {
-
-                int index = ThreadLocalRandom.current().nextInt(preferable.size());
+                int index = ThreadLocalRandom.current().nextInt(preferable.size()+1);
                 preferable.add(index, plant.getPosition());
             } else {
-                int index = ThreadLocalRandom.current().nextInt(nonPreferable.size());
+                int index = ThreadLocalRandom.current().nextInt(nonPreferable.size()+1);
                 nonPreferable.add(index, plant.getPosition());
             }
             updateFreePlantSpaces();
@@ -89,13 +88,21 @@ public class EarthMap extends AbstractWorldMap {
     public void growPlants() {
 
         for(int i = 0; i < min(super.grassGrowthPerDay, this.getFreePlantSpaces()); i++) {
-            int chance = ThreadLocalRandom.current().nextInt(5);
-            if (chance == 0) {
-                plants.put(nonPreferable.get(0), new EarthPlant(nonPreferable.get(0), false));
-                nonPreferable.remove(0);
-            } else {
+            if (!preferable.isEmpty() && !nonPreferable.isEmpty()) {
+                int chance = ThreadLocalRandom.current().nextInt(5);
+                if (chance == 0) {
+                    plants.put(nonPreferable.get(0), new EarthPlant(nonPreferable.get(0), false));
+                    nonPreferable.remove(0);
+                } else {
+                    plants.put(preferable.get(0), new EarthPlant(preferable.get(0), true));
+                    preferable.remove(0);
+                }
+            } else if (!preferable.isEmpty()) {
                 plants.put(preferable.get(0), new EarthPlant(preferable.get(0), true));
                 preferable.remove(0);
+            } else if (!nonPreferable.isEmpty()) {
+                plants.put(nonPreferable.get(0), new EarthPlant(nonPreferable.get(0), false));
+                nonPreferable.remove(0);
             }
         }
 
