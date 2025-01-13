@@ -49,10 +49,10 @@ public class EarthMap extends AbstractWorldMap {
                     plants.put(preferable.get(p_ind), new EarthPlant(preferable.get(p_ind), true));
                     p_ind++;
                 }
-            } else if (!preferable.isEmpty() && nonPreferable.isEmpty()) {
+            } else if (!preferable.isEmpty()) {
                 plants.put(preferable.get(p_ind), new EarthPlant(preferable.get(p_ind), true));
                 p_ind++;
-            } else if (preferable.isEmpty() && !nonPreferable.isEmpty()) {
+            } else if (!nonPreferable.isEmpty()) {
                 plants.put(nonPreferable.get(np_ind), new EarthPlant(nonPreferable.get(np_ind), false));
                 np_ind++;
             }
