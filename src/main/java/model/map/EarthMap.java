@@ -40,15 +40,24 @@ public class EarthMap extends AbstractWorldMap {
         int np_ind = 0;
 
         for(int i = 0; i < super.grassCount; i++) {
-            int chance = ThreadLocalRandom.current().nextInt(5);
-            if(chance == 0) {
+            if (!preferable.isEmpty() && !nonPreferable.isEmpty()) {
+                int chance = ThreadLocalRandom.current().nextInt(5);
+                if (chance == 0) {
+                    plants.put(nonPreferable.get(np_ind), new EarthPlant(nonPreferable.get(np_ind), false));
+                    np_ind++;
+                } else {
+                    plants.put(preferable.get(p_ind), new EarthPlant(preferable.get(p_ind), true));
+                    p_ind++;
+                }
+            } else if (!preferable.isEmpty() && nonPreferable.isEmpty()) {
+                plants.put(preferable.get(p_ind), new EarthPlant(preferable.get(p_ind), true));
+                p_ind++;
+            } else if (preferable.isEmpty() && !nonPreferable.isEmpty()) {
                 plants.put(nonPreferable.get(np_ind), new EarthPlant(nonPreferable.get(np_ind), false));
                 np_ind++;
             }
-            else {
-                plants.put(preferable.get(p_ind), new EarthPlant(preferable.get(p_ind), true));
-                p_ind++;
-            }
+
+
         }
 
         preferable = preferable.subList(p_ind, preferable.size());
@@ -59,6 +68,7 @@ public class EarthMap extends AbstractWorldMap {
         if (plants.containsValue(plant)) {
             plants.remove(plant.getPosition());
             if (plant.isPreferredPosition()) {
+
                 int index = ThreadLocalRandom.current().nextInt(preferable.size());
                 preferable.add(index, plant.getPosition());
             } else {
@@ -81,11 +91,11 @@ public class EarthMap extends AbstractWorldMap {
         for(int i = 0; i < min(super.grassGrowthPerDay, this.getFreePlantSpaces()); i++) {
             int chance = ThreadLocalRandom.current().nextInt(5);
             if (chance == 0) {
-                plants.put(nonPreferable.getFirst(), new EarthPlant(nonPreferable.getFirst(), false));
-                nonPreferable.remove(nonPreferable.getFirst());
+                plants.put(nonPreferable.get(0), new EarthPlant(nonPreferable.get(0), false));
+                nonPreferable.remove(0);
             } else {
-                plants.put(preferable.getFirst(), new EarthPlant(preferable.getFirst(), true));
-                preferable.remove(preferable.getFirst());
+                plants.put(preferable.get(0), new EarthPlant(preferable.get(0), true));
+                preferable.remove(0);
             }
         }
 
