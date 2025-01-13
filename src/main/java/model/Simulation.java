@@ -24,7 +24,6 @@ public class Simulation implements Runnable {
 
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount());
 
-        System.out.println(configuration.getAnimalType());
         for (Vector2D position: randomPositionGenerator) {
             if (configuration.getAnimalType() == Configuration.AnimalType.AGING) {
                 AbstractAnimal animal = new AgingAnimal(position, configuration.getAnimalStartingEnergy(), configuration);

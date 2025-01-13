@@ -75,6 +75,9 @@ public class ConfigurationSimulationPresenter {
     @FXML
     public TextField totalSimulationDaysTextField;
 
+    @FXML
+    public ComboBox mapTypeSelector;
+
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
         primaryStage.setScene(scene);
@@ -83,8 +86,8 @@ public class ConfigurationSimulationPresenter {
     }
 
     private Simulation getSimulation(SimulationPresenter simulationPresenter) {
-//        Configuration configuration = getConfiguration();
-        Configuration configuration = new Configuration();
+        Configuration configuration = getConfiguration();
+//        Configuration configuration = new Configuration();
 
         AbstractWorldMap map = configuration.getSelectedMap();
 
@@ -159,15 +162,20 @@ public class ConfigurationSimulationPresenter {
     private Configuration getConfiguration() throws NumberFormatException {
         Configuration configuration = new Configuration();
 
-        // map configuration
+        //  map configuration
         configuration.setMapWidth(Integer.parseInt(mapWidthTextField.getText()));
         configuration.setMapHeight(Integer.parseInt(mapHeightTextField.getText()));
         configuration.setStartingGrassCount(Integer.parseInt(startingGrassCountTextField.getText()));
         configuration.setGrassGrowthPerDay(Integer.parseInt(grassGrowthPerDayTextField.getText()));
         configuration.setGrassEnergyLevel(Integer.parseInt(grassEnergyLevelTextField.getText()));
 
-        // animal configuration
+        if (mapTypeSelector.getValue().equals("Earth")) {
+            configuration.setMapType(Configuration.MapType.EARTH_MAP);
+        } else if (mapTypeSelector.getValue().equals("Ocean")) {
+            configuration.setMapType(Configuration.MapType.OCEAN_MAP);
+        }
 
+        // animal configuration
         if (animalTypeSelector.getValue().equals("Normal")) {
             configuration.setAnimalType(Configuration.AnimalType.NORMAL);
         } else if (animalTypeSelector.getValue().equals("Aging")) {

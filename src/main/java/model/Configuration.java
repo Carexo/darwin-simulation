@@ -1,7 +1,8 @@
 package model;
 
-import model.elements.animal.Animal;
+import model.elements.TidesMap;
 import model.map.AbstractWorldMap;
+import model.map.EarthMap;
 
 public class Configuration {
 
@@ -56,8 +57,8 @@ public class Configuration {
 
     public AbstractWorldMap getSelectedMap() {
         return switch(mapType){
-            case EARTH_MAP -> new model.map.EarthMap(this);
-            case OCEAN_MAP -> new model.map.EarthMap(this);
+            case EARTH_MAP -> new EarthMap(this);
+            case OCEAN_MAP -> new TidesMap(this);
         };
     }
 
