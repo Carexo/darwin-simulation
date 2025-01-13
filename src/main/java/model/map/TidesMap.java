@@ -1,7 +1,9 @@
-package model.elements;
+package model.map;
 
 import model.Configuration;
-import model.map.AbstractWorldMap;
+import model.elements.Vector2D;
+import model.elements.Water;
+import model.elements.WorldElement;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,7 +27,14 @@ public class TidesMap extends AbstractWorldMap {
         this.startingOceanCount = config.getStartingOceanCount();
         this.maxOceanSize = config.getMaxOceanSize();
         this.oceanChangeRate = config.getOceanChangeRate();
-        generateOcean();
+        {
+            try {
+                generateOcean();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Ocean generation failed");
+            }
+        }
         this.oceanState = false;
 
     }
@@ -33,8 +42,14 @@ public class TidesMap extends AbstractWorldMap {
     private void generateOcean() {
         List<Vector2D> tempList = new ArrayList<Vector2D>();
         List<Vector2D> freeSlots = new ArrayList<>();
-        Collections.shuffle(tempList);
 
+        for (int i = 0; i<width;i++){
+            for(int j=0;j<height;j++){
+                tempList.add(new Vector2D(i,j));
+            }
+        }
+
+        Collections.shuffle(tempList);
 
         for (int i = 0; i < min(waterSegments, startingOceanCount); i++) {
             waterMap.put(tempList.get(i), new Water(tempList.get(i)));
@@ -42,7 +57,12 @@ public class TidesMap extends AbstractWorldMap {
         }
 
         for (int i = 0; i < this.startingOceanCount - waterSegments; i++) {
-            int index = ThreadLocalRandom.current().nextInt(freeSlots.size());
+            int index;
+            if (freeSlots.isEmpty()) {
+                index = 0;
+            }else {
+                index = ThreadLocalRandom.current().nextInt(freeSlots.size());
+            }
             Vector2D v = tempList.get(index);
             waterMap.put(v, new Water(v));
             freeSlots.remove(index);
