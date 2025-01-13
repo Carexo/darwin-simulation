@@ -56,8 +56,6 @@ public class EarthMap extends AbstractWorldMap {
                 plants.put(nonPreferable.get(np_ind), new EarthPlant(nonPreferable.get(np_ind), false));
                 np_ind++;
             }
-
-
         }
 
         preferable = preferable.subList(p_ind, preferable.size());
