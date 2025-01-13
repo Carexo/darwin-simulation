@@ -7,8 +7,10 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
+import static java.lang.Math.min;
+
 public class TidesMap extends AbstractWorldMap {
-    private int waterSegments = 2;
+    private int waterSegments = 1;
     private boolean oceanState;
 
     private int startingOceanCount;
@@ -34,7 +36,7 @@ public class TidesMap extends AbstractWorldMap {
         Collections.shuffle(tempList);
 
 
-        for (int i = 0; i < waterSegments; i++) {
+        for (int i = 0; i < min(waterSegments, startingOceanCount); i++) {
             waterMap.put(tempList.get(i), new Water(tempList.get(i)));
             newFreeSlots(freeSlots, tempList.get(i));
         }
@@ -48,7 +50,7 @@ public class TidesMap extends AbstractWorldMap {
 
         }
 
-        waterMap.forEach((key, value) -> checkTides(key));
+//        waterMap.forEach((key, value) -> checkTides(key));
 
 
     }
