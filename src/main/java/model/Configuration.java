@@ -48,9 +48,9 @@ public class Configuration {
     private int genomeLength = 8;
     private int minimalMutationsCount = 1;
     private int maximalMutationsCount = 3;
-    private int startingOceanCount = 8;
-    private int maxOceanSize = 5;
-    private int oceanChangeRate = 10;
+    private int startingOceanCount = 10;
+    private int waterSegments = 3;
+    private int oceanChangeRate = 4;
     private int simulationSpeed = 1000;
     private int totalSimulationDays = Integer.MAX_VALUE;
     private double chanceOfAnimalSkipMove = 0.1;
@@ -191,12 +191,12 @@ public class Configuration {
         this.startingOceanCount = startingOceanCount;
     }
 
-    public int getMaxOceanSize() {
-        return maxOceanSize;
+    public int getWaterSegments() {
+        return waterSegments;
     }
 
-    public void setMaxOceanSize(int maxOceanSize) {
-        this.maxOceanSize = maxOceanSize;
+    public void setWaterSegments(int waterSegments) {
+        this.waterSegments = waterSegments;
     }
 
     public int getOceanChangeRate() {

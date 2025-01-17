@@ -44,7 +44,7 @@ public class Simulation implements Runnable {
 
                 if(map instanceof TidesMap) {
                     drownAnimals();
-                    if (dayNumber % 4 == 0) {
+                    if (dayNumber % configuration.getOceanChangeRate() == 0) {
                         ((TidesMap) map).switchOceanState();
                     }
                 }
