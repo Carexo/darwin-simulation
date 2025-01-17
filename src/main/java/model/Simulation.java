@@ -21,10 +21,15 @@ public class Simulation implements Runnable {
     public Simulation(AbstractWorldMap map, Configuration configuration) {
         this.map = map;
         this.configuration = configuration;
+        RandomPositionGenerator randomPositionGenerator = null;
 
+        if (map instanceof TidesMap) {
+            List<Vector2D> keyList = new ArrayList<Vector2D>(((TidesMap) map).getWaterMap().keySet());
+            randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount(), keyList);
 
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount());
-
+        } else {
+            randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount());
+        }
         for (Vector2D position: randomPositionGenerator) {
             if (configuration.getAnimalType() == Configuration.AnimalType.AGING) {
                 AbstractAnimal animal = new AgingAnimal(position, configuration.getAnimalStartingEnergy(), configuration);
