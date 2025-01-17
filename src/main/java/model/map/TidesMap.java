@@ -1,6 +1,7 @@
 package model.map;
 
 import model.Configuration;
+import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.Water;
 import model.elements.WorldElement;
@@ -112,7 +113,11 @@ public class TidesMap extends AbstractWorldMap {
 
     @Override
     public void growPlants() {
-
+        for(int i = 0; i< min(plantSpaces.size(), super.grassGrowthPerDay); i++) {
+            Vector2D v = plantSpaces.getFirst();
+            plants.put(v, new Plant(v));
+            plantSpaces.removeFirst();
+        }
     }
 
     @Override
