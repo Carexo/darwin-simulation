@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import static java.lang.Math.min;
 
 public class TidesMap extends AbstractWorldMap {
-    private int waterSegments = 1;
+    private int waterSegments = 2;
     private boolean oceanState;
 
     private int startingOceanCount;
@@ -52,18 +52,20 @@ public class TidesMap extends AbstractWorldMap {
         Collections.shuffle(tempList);
 
         for (int i = 0; i < min(waterSegments, startingOceanCount); i++) {
+            System.out.println(i);
             waterMap.put(tempList.get(i), new Water(tempList.get(i)));
             newFreeSlots(freeSlots, tempList.get(i));
         }
 
         for (int i = 0; i < this.startingOceanCount - waterSegments; i++) {
+            System.out.println(i);
             int index;
             if (freeSlots.isEmpty()) {
                 index = 0;
             }else {
                 index = ThreadLocalRandom.current().nextInt(freeSlots.size());
             }
-            Vector2D v = tempList.get(index);
+            Vector2D v = freeSlots.get(index);
             waterMap.put(v, new Water(v));
             freeSlots.remove(index);
             newFreeSlots(freeSlots, v);
