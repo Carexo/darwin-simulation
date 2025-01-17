@@ -12,11 +12,23 @@ public class RandomPositionGenerator implements Iterable<Vector2D> {
     private final int maxHeight;
     private final int count;
     private final List<Vector2D> positions;
+    private List<Vector2D> exclude;
 
     public RandomPositionGenerator(int maxWidth, int maxHeight, int count) {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
         this.count = count;
+        this.exclude = new ArrayList<>();
+
+        this.positions = generateAllPosition();
+        Collections.shuffle(positions);
+    }
+
+    public RandomPositionGenerator(int maxWidth, int maxHeight, int count, List<Vector2D> exclude) {
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
+        this.count = count;
+        this.exclude = exclude;
 
         this.positions = generateAllPosition();
         Collections.shuffle(positions);
@@ -27,7 +39,10 @@ public class RandomPositionGenerator implements Iterable<Vector2D> {
 
         for (int x = 0; x < maxWidth; x++) {
             for (int y = 0; y < maxHeight; y++) {
-                positions.add(new Vector2D(x, y));
+                if(!exclude.contains(new Vector2D(x, y))) {
+                    positions.add(new Vector2D(x, y));
+                }
+
             }
         }
 
