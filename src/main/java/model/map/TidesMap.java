@@ -52,13 +52,11 @@ public class TidesMap extends AbstractWorldMap {
         Collections.shuffle(tempList);
 
         for (int i = 0; i < min(waterSegments, startingOceanCount); i++) {
-            System.out.println(i);
             waterMap.put(tempList.get(i), new Water(tempList.get(i)));
             newFreeSlots(freeSlots, tempList.get(i));
         }
 
         for (int i = 0; i < this.startingOceanCount - waterSegments; i++) {
-            System.out.println(i);
             int index;
             if (freeSlots.isEmpty()) {
                 index = 0;
@@ -71,9 +69,6 @@ public class TidesMap extends AbstractWorldMap {
             newFreeSlots(freeSlots, v);
 
         }
-
-//        waterMap.forEach((key, value) -> checkTides(key));
-
 
     }
 
