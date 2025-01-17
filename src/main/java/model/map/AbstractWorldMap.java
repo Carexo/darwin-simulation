@@ -8,6 +8,7 @@ import model.elements.animal.AbstractAnimal;
 import model.util.MapVisualizer;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
@@ -23,7 +24,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
     protected int freePlantSpaces;
     protected int grassGrowthPerDay;
-    protected List<Vector2D> plantSpaces;
+    protected List<Vector2D> plantSpaces = new ArrayList<>();
 
 
     public AbstractWorldMap(Configuration config) {
@@ -32,6 +33,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         grassCount = config.getStartingGrassCount();
         grassGrowthPerDay = config.getGrassGrowthPerDay();
+
 
     }
 
@@ -77,6 +79,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     private void removePlant(Plant plant) {
+        if(!plants.isEmpty()) {
+            int index = ThreadLocalRandom.current().nextInt(plants.size());
+            plantSpaces.add(index + 1, plant.getPosition());
+        } else {
+            plantSpaces.add(plant.getPosition());
+        }
         plants.remove(plant.getPosition());
     }
 
@@ -147,6 +155,21 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public int getFreePlantSpaces() {
         return this.freePlantSpaces;
+    }
+
+    protected void initialPlantGenerator(Configuration config) {
+//        for(int i = 0; i<width; i++) {
+//            for(int j = 0; j<height; j++) {
+//                plantSpaces.add(new Vector2D(i, j));
+//            }
+//        }
+        Collections.shuffle(plantSpaces);
+        for(int i = 0; i< config.getStartingGrassCount(); i++) {
+            Vector2D v = plantSpaces.getFirst();
+            plantSpaces.removeFirst();
+            plants.put(v, new Plant(v));
+        }
+
     }
 
     public abstract void growPlants();

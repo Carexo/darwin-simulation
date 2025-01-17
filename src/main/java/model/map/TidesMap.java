@@ -12,12 +12,10 @@ import java.util.stream.Stream;
 import static java.lang.Math.min;
 
 public class TidesMap extends AbstractWorldMap {
-    private int waterSegments = 2;
+    private final int waterSegments;
     private boolean oceanState;
 
-    private int startingOceanCount;
-    private int maxOceanSize;
-    private int oceanChangeRate;
+    private final int startingOceanCount;
 
     Map<Vector2D, Water> waterMap = new HashMap<Vector2D, Water>();
     Map<Vector2D, Water> tideMap = new HashMap<Vector2D, Water>();
@@ -25,8 +23,7 @@ public class TidesMap extends AbstractWorldMap {
     public TidesMap(Configuration config) {
         super(config);
         this.startingOceanCount = config.getStartingOceanCount();
-        this.maxOceanSize = config.getMaxOceanSize();
-        this.oceanChangeRate = config.getOceanChangeRate();
+        this.waterSegments = config.getWaterSegments();
         {
             try {
                 generateOcean();
@@ -38,7 +35,12 @@ public class TidesMap extends AbstractWorldMap {
             }
         }
         this.oceanState = false;
-
+        try {
+            genPlantSpaces();
+            super.initialPlantGenerator(config);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void generateOcean() {
@@ -144,6 +146,18 @@ public class TidesMap extends AbstractWorldMap {
 //    }
     public Map<Vector2D, Water> getWaterMap() {
         return waterMap;
+    }
+
+    private void genPlantSpaces() {
+        for(int i = 0; i<width; i++){
+            for(int j = 0; j<height; j++){
+                if(!waterMap.containsKey(new Vector2D(i,j)) && !tideMap.containsKey(new Vector2D(i,j))) {
+                    super.plantSpaces.add(new Vector2D(i,j));
+                }
+            }
+        }
+
+
     }
 
 

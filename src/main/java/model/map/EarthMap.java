@@ -19,7 +19,8 @@ public class EarthMap extends AbstractWorldMap {
         initialPlantGenerator(config);
     }
 
-    private void initialPlantGenerator(Configuration config) {
+    @Override
+    protected void initialPlantGenerator(Configuration config) {
         int equatorHeight = this.height/6;
         int equator = this.height/2;
 
@@ -89,18 +90,18 @@ public class EarthMap extends AbstractWorldMap {
             if (!preferable.isEmpty() && !nonPreferable.isEmpty()) {
                 int chance = ThreadLocalRandom.current().nextInt(5);
                 if (chance == 0) {
-                    plants.put(nonPreferable.get(0), new EarthPlant(nonPreferable.get(0), false));
-                    nonPreferable.remove(0);
+                    plants.put(nonPreferable.getFirst(), new EarthPlant(nonPreferable.getFirst(), false));
+                    nonPreferable.removeFirst();
                 } else {
-                    plants.put(preferable.get(0), new EarthPlant(preferable.get(0), true));
-                    preferable.remove(0);
+                    plants.put(preferable.getFirst(), new EarthPlant(preferable.getFirst(), true));
+                    preferable.removeFirst();
                 }
             } else if (!preferable.isEmpty()) {
-                plants.put(preferable.get(0), new EarthPlant(preferable.get(0), true));
-                preferable.remove(0);
+                plants.put(preferable.getFirst(), new EarthPlant(preferable.getFirst(), true));
+                preferable.removeFirst();
             } else if (!nonPreferable.isEmpty()) {
-                plants.put(nonPreferable.get(0), new EarthPlant(nonPreferable.get(0), false));
-                nonPreferable.remove(0);
+                plants.put(nonPreferable.getFirst(), new EarthPlant(nonPreferable.getFirst(), false));
+                nonPreferable.removeFirst();
             }
         }
 
