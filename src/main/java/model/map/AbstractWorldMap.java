@@ -23,6 +23,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
     protected int freePlantSpaces;
     protected int grassGrowthPerDay;
+    protected List<Vector2D> plantSpaces;
 
 
     public AbstractWorldMap(Configuration config) {
@@ -31,6 +32,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         grassCount = config.getStartingGrassCount();
         grassGrowthPerDay = config.getGrassGrowthPerDay();
+
     }
 
     private void addAnimal(AbstractAnimal animal) {
