@@ -86,7 +86,8 @@ public class ConfigurationSimulationPresenter {
     }
 
     private Simulation getSimulation(SimulationPresenter simulationPresenter) {
-        Configuration configuration = getConfiguration();
+//        Configuration configuration = getConfiguration();
+        Configuration configuration = new Configuration();
 
         AbstractWorldMap map = configuration.getSelectedMap();
 

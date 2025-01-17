@@ -30,6 +30,8 @@ public class TidesMap extends AbstractWorldMap {
         {
             try {
                 generateOcean();
+                waterMap.forEach((key, water) -> checkTides(key));
+
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Ocean generation failed");
@@ -136,6 +138,12 @@ public class TidesMap extends AbstractWorldMap {
                                 .map(waterMap::get)
                 )
         );
+    }
+//    public void drownAnimals() {
+//        super.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(waterMap.containsKey(v)){animal.die(0);}}));
+//    }
+    public Map<Vector2D, Water> getWaterMap() {
+        return waterMap;
     }
 
 

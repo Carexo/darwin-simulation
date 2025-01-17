@@ -6,16 +6,17 @@ import model.elements.animal.AbstractAnimal;
 import model.elements.animal.AgingAnimal;
 import model.elements.animal.Animal;
 import model.map.AbstractWorldMap;
+import model.map.TidesMap;
 import model.util.AnimalUtils;
 import model.util.RandomPositionGenerator;
 
 import java.util.*;
 
 public class Simulation implements Runnable {
-    private final UUID simulationId = UUID.randomUUID();
-    private int dayNumber = 0;
-    private final AbstractWorldMap map;
-    private final Configuration configuration;
+    protected final UUID simulationId = UUID.randomUUID();
+    protected int dayNumber = 0;
+    protected final AbstractWorldMap map;
+    protected Configuration configuration;
 
     public Simulation(AbstractWorldMap map, Configuration configuration) {
         this.map = map;
@@ -41,6 +42,12 @@ public class Simulation implements Runnable {
             while (SimulationCanRun()) {
                 dayNumber++;
 
+                if(map instanceof TidesMap) {
+                    drownAnimals();
+                    if (dayNumber % 4 == 0) {
+                        ((TidesMap) map).switchOceanState();
+                    }
+                }
                 removeDeathAnimal();
                 moveAnimals();
                 animalEats();
@@ -59,14 +66,14 @@ public class Simulation implements Runnable {
         return !(map.getAnimalsList().isEmpty() || dayNumber > configuration.getTotalSimulationDays());
     }
 
-    private void removeDeathAnimal() {
+    protected void removeDeathAnimal() {
         List<AbstractAnimal> deadAnimals = AnimalUtils.getDeathAnimals(map.getAnimalsList());
 
         deadAnimals.forEach(map::remove);
         deadAnimals.forEach(animal -> animal.setDiedAt(dayNumber));
     }
 
-    private void animalEats() {
+    protected void animalEats() {
         Map<Vector2D, List<AbstractAnimal>> animals = map.getAnimals();
         Map<Vector2D, Plant> plants = map.getPlants();
 
@@ -82,11 +89,11 @@ public class Simulation implements Runnable {
 
     }
 
-    private void moveAnimals() {
+    protected void moveAnimals() {
         map.getAnimalsList().forEach(map::move);
     }
 
-    private void agingAnimals() {
+    protected void agingAnimals() {
         map.getAnimalsList().forEach(AbstractAnimal::aging);
     }
 
@@ -105,6 +112,9 @@ public class Simulation implements Runnable {
                 map.place(child);
             }
         }
+    }
+    public void drownAnimals() {
+        map.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(((TidesMap)map).getWaterMap().containsKey(v)){animal.die(0);}}));
     }
 
     public UUID getSimulationId() {
