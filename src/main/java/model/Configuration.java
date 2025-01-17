@@ -48,7 +48,7 @@ public class Configuration {
     private int genomeLength = 8;
     private int minimalMutationsCount = 1;
     private int maximalMutationsCount = 3;
-    private int startingOceanCount = 8;
+    private int startingOceanCount = 4;
     private int maxOceanSize = 5;
     private int oceanChangeRate = 10;
     private int simulationSpeed = 500;
