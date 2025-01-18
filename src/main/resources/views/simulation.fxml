@@ -5,20 +5,28 @@
 
 <BorderPane minHeight="550.0" minWidth="850.0" stylesheets="@../styles/simulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.SimulationPresenter">
     <top>
-        <VBox>
-            <Label fx:id="infoMove" styleClass="info-move" />
+        <VBox alignment="CENTER" prefHeight="46.0" prefWidth="850.0">
+            <Label fx:id="simulationInfo" styleClass="info-move" text="Simulation is running" />
         </VBox>
     </top>
    <left>
-       <VBox prefHeight="492.0" prefWidth="225.0" BorderPane.alignment="CENTER">
+
+       <VBox alignment="CENTER" prefHeight="492.0" prefWidth="212.0" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
             <fx:include fx:id="detailsSimulation" source="detailsSimulation.fxml" />
+           <VBox alignment="CENTER" spacing="10">
+               <children>
+                   <Button disable="true" fx:id="showPopularGenome" onAction="#onShowPopularGenomeClick" prefHeight="55.0" prefWidth="192.0" text="Show animals with popular genome" textAlignment="CENTER" wrapText="true" />
+                   <Button disable="true" fx:id="showPlantsPosition" onAction="#onShowPlantsPreferredPositionClick" prefWidth="Infinity" text="Show plants preferred positions" textAlignment="CENTER" wrapText="true" />
+               </children>
+           </VBox>
        </VBox>
+
    </left>
    <center>
         <GridPane fx:id="mapGrid" gridLinesVisible="true" styleClass="grid-map" BorderPane.alignment="CENTER" />
    </center>
    <right>
-      <VBox prefHeight="492.0" prefWidth="225.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="492.0" prefWidth="191.0" BorderPane.alignment="CENTER">
               <fx:include fx:id="informationAnimal" source="informationAnimal.fxml" />
       </VBox>
    </right>

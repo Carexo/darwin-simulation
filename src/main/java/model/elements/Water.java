@@ -1,5 +1,7 @@
 package model.elements;
 
+import javafx.scene.paint.Color;
+
 public class Water implements WorldElement{
     Vector2D position;
 
@@ -22,5 +24,15 @@ public class Water implements WorldElement{
     @Override
     public String toString() {
         return "~";
+    }
+
+    @Override
+    public String getImageSource() {
+        return "images/water.png";
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.BLUE;
     }
 }

@@ -1,5 +1,6 @@
 package model.elements.animal;
 
+import javafx.scene.paint.Color;
 import model.Configuration;
 import model.map.MoveValidator;
 import model.elements.MapDirection;
@@ -169,5 +170,22 @@ public abstract class AbstractAnimal implements WorldElement {
 
     public Genome getGenome() {
         return genome;
+    }
+
+    @Override
+    public String getImageSource() {
+        return "images/animal.png";
+    }
+
+    @Override
+    public Color getColor() {
+        double maxEnergy = configuration.getAnimalStartingEnergy();
+        double energyRatio = Math.min(energyLevel / maxEnergy, 1);
+
+        double red = 1.0;
+        double green = 1.0 - energyRatio;
+        double blue = 1.0 - energyRatio * 0.5;
+
+        return Color.color(red, green, blue);
     }
 }

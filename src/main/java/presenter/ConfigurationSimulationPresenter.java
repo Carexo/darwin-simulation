@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import model.Configuration;
 import model.simulation.Simulation;
 import model.map.AbstractWorldMap;
+import model.util.CSVWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,6 +79,8 @@ public class ConfigurationSimulationPresenter {
 
     @FXML
     public ComboBox mapTypeSelector;
+    @FXML
+    public CheckBox csvStatisticSaving;
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
@@ -92,6 +96,10 @@ public class ConfigurationSimulationPresenter {
         AbstractWorldMap map = configuration.getSelectedMap();
 
         Simulation simulation = new Simulation(map, configuration);
+
+        if (configuration.isCsvStatisticSaving()) {
+            simulation.subscribe(new CSVWriter(), Simulation.SimulationEventType.CHANGE);
+        }
 
         simulationPresenter.init(map, simulation);
 
@@ -111,10 +119,19 @@ public class ConfigurationSimulationPresenter {
 
             SimulationPresenter simulationPresenter = fxmlLoader.getController();
 
-
             Simulation simulation = getSimulation(simulationPresenter);
 
             stage.setOnCloseRequest(event -> simulationEngine.stopSingleSimulation(simulation));
+
+            simulationPresenter.calculateCellSize(stage.getWidth(), stage.getHeight());
+
+            stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+                simulationPresenter.calculateCellSize(newVal.doubleValue(), stage.getHeight());
+            });
+
+            stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+                simulationPresenter.calculateCellSize(stage.getWidth(), newVal.doubleValue());
+            });
 
             simulationEngine.addSimulation(simulation);
 
@@ -196,6 +213,9 @@ public class ConfigurationSimulationPresenter {
         // simulation configuration
         configuration.setSimulationSpeed(Integer.parseInt(simulationSpeed.getText()));
         configuration.setTotalSimulationDays(Integer.parseInt(totalSimulationDaysTextField.getText()));
+
+        // simulation configuration
+        configuration.setCsvStatisticSaving(csvStatisticSaving.isSelected());
 
         return configuration;
     }

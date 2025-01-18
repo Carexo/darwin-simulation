@@ -10,4 +10,19 @@
 
 .current-gene {
     -fx-font-weight: bold;
+    -fx-fill: darkblue;
+}
+
+.selected-animal {
+    -fx-background-color: yellow;
+}
+
+.popular-genome {
+    -fx-stroke: magenta;
+    -fx-stroke-width: 1;
+}
+
+.rectangle-border {
+    -fx-stroke: yellow;
+    -fx-stroke-width: 1;
 }
