@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="363.0" prefWidth="225.0" spacing="20.0" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.InformationAnimal">
+   <VBox prefHeight="61.0" prefWidth="205.0" spacing="3.0">
+            <HBox>
+                  <Label text="Energy level:" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <Label fx:id="energyLevel" alignment="CENTER" contentDisplay="CENTER" />
+            </HBox>
+            <HBox>
+               <Label text="Eaten plants:" />
+                <Pane HBox.hgrow="ALWAYS" />
+               <Label fx:id="eatenPlants"  alignment="CENTER" contentDisplay="CENTER"/>
+            </HBox>
+            <HBox>
+               <Label text="Children count:" />
+                <Pane HBox.hgrow="ALWAYS" />
+               <Label fx:id="childrenCount" />
+            </HBox>
+            <HBox >
+               <Label text="Descendant:" />
+                <Pane HBox.hgrow="ALWAYS" />
+               <Label fx:id="descendantCount" />
+            </HBox>
+            <HBox>
+               <Label fx:id="aliveStatusTitle" text="Age:" />
+                <Pane HBox.hgrow="ALWAYS" />
+               <Label fx:id="aliveStatus" />
+            </HBox>
+   </VBox>
+   <VBox >
+         <Label text="Genome:" />
+         <ListView fx:id="genome" editable="true" prefHeight="177.0" prefWidth="205.0" />
+   </VBox>
+</VBox>

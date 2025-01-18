@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.Button?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            minHeight="550.0" minWidth="850.0"
-            stylesheets="@../styles/simulation.css"
-            fx:controller="presenter.SimulationPresenter">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane minHeight="550.0" minWidth="850.0" stylesheets="@../styles/simulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.SimulationPresenter">
     <top>
         <VBox>
-            <Label fx:id="infoMove" styleClass="info-move"/>
+            <Label fx:id="infoMove" styleClass="info-move" />
         </VBox>
     </top>
-    <center>
-        <GridPane fx:id="mapGrid" gridLinesVisible="true" styleClass="grid-map"/>
-    </center>
-    <bottom>
-        <VBox>
-            <Button text="Start" onAction="#onSimulationStartClicked"/>
-            <Button text="Pause" onAction="#onSimulationPauseClicked"/>
-        </VBox>
-    </bottom>
+   <left>
+       <VBox prefHeight="492.0" prefWidth="225.0" BorderPane.alignment="CENTER">
+            <fx:include fx:id="detailsSimulation" source="detailsSimulation.fxml" />
+       </VBox>
+   </left>
+   <center>
+        <GridPane fx:id="mapGrid" gridLinesVisible="true" styleClass="grid-map" BorderPane.alignment="CENTER" />
+   </center>
+   <right>
+      <VBox prefHeight="492.0" prefWidth="225.0" BorderPane.alignment="CENTER">
+              <fx:include fx:id="informationAnimal" source="informationAnimal.fxml" />
+      </VBox>
+   </right>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="38.0" prefWidth="850.0" BorderPane.alignment="CENTER">
+         <children>
+                  <Button fx:id="controlButton" alignment="CENTER" onAction="#onSimulationControlButtonClick" text="Pause" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

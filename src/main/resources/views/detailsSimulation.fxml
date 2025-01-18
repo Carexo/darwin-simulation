@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="225.0" spacing="20" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.DetailsSimulation">
+    <VBox spacing="3">
+        <HBox>
+            <Label text="Animals count:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="animalsCount"  />
+        </HBox>
+        <HBox>
+            <Label text="Plants count:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="plantsCount" />
+        </HBox>
+        <HBox>
+            <Label text="Free positions count:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="freePositionsCount" />
+        </HBox>
+        <HBox>
+            <Label text="Average animal energy:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="averageAnimalEnergy" />
+        </HBox>
+        <HBox>
+            <Label text="Average died animal lifespan:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="averageDiedAnimalLifespan" />
+        </HBox>
+        <HBox>
+            <Label text="Average child count:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="averageChildCount" />
+        </HBox>
+    </VBox>
+    <VBox>
+        <Label text="Most popular genome:" />
+      <ScrollPane prefHeight="200.0" prefWidth="200.0">
+        <content>
+            <Label fx:id="mostPopularGenome" />
+        </content>
+      </ScrollPane>
+
+    </VBox>
+</VBox>

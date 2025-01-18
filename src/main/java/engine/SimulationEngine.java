@@ -1,6 +1,6 @@
 package engine;
 
-import model.Simulation;
+import model.simulation.Simulation;
 
 import java.util.*;
 

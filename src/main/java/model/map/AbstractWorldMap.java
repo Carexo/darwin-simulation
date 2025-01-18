@@ -8,19 +8,20 @@ import model.elements.animal.AbstractAnimal;
 import model.util.MapVisualizer;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected final UUID id = UUID.randomUUID();
 
-    protected final Map<Vector2D, Plant> plants = new HashMap<>();
+    protected final Map<Vector2D, Plant> plants = new ConcurrentHashMap<>();
     protected final int width;
     protected final int height;
     List<MapChangeListener> listeners = new ArrayList<>();
     private final Boundary boundary;
     protected int grassCount;
-    private final Map<Vector2D, List<AbstractAnimal>> animals = new HashMap<>();
+    private final Map<Vector2D, List<AbstractAnimal>> animals = new ConcurrentHashMap<>();
     private final MapVisualizer mapVisualizer = new MapVisualizer(this);
     protected int freePlantSpaces;
     protected int grassGrowthPerDay;

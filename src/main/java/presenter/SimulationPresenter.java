@@ -1,26 +1,29 @@
 package presenter;
 
 
-import engine.SimulationEngine;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import model.Configuration;
-import model.Simulation;
+import model.simulation.Simulation;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
+import model.elements.animal.AbstractAnimal;
 import model.map.AbstractWorldMap;
-import model.map.EarthMap;
 import model.map.MapChangeListener;
 import model.map.WorldMap;
-import model.util.ConsoleMapDisplay;
+import model.simulation.StatisticSimulation;
 
 import java.util.List;
+
 
 public class SimulationPresenter implements MapChangeListener {
     @FXML
@@ -28,9 +31,17 @@ public class SimulationPresenter implements MapChangeListener {
 
     @FXML
     public GridPane mapGrid;
+    @FXML
+    public Button controlButton;
+
+    @FXML
+    private InformationAnimal informationAnimalController;
+    @FXML
+    private DetailsSimulation detailsSimulationController;
+
 
     private AbstractWorldMap map;
-    private SimulationEngine engine;
+    private Simulation simulation;
 
     public void setWorldMap(AbstractWorldMap map) {
         this.map = map;
@@ -73,11 +84,28 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < map.getWidth(); i++) {
             for (int j = map.getHeight() - 1; j >= 0; j--) {
                 Vector2D position = new Vector2D(i, j);
+                Label label = new Label(" ");
+                label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Make label fill the cell
+                label.setAlignment(Pos.CENTER);
+
+
                 if (map.isOccupied(position)) {
                     WorldElement element = map.objectsAt(position).toList().getFirst();
-                    mapGrid.add(new Label(element.toString()), i + 1,  map.getHeight() - j);
+                    List<AbstractAnimal> animals = map.getAnimals().get(position);
+
+                    if (animals != null) {
+                        label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                handleAnimalClicked(animals);
+                            }
+                        });
+                    }
+
+                    label.setText(element.toString());
+                    mapGrid.add(label, i + 1,  map.getHeight() - j);
                 } else {
-                    mapGrid.add(new Label(" "), i + 1, map.getHeight() - j);
+                    mapGrid.add(label, i + 1, map.getHeight() - j);
                 }
 
                 GridPane.setHalignment(mapGrid.getChildren().getLast(), HPos.CENTER);
@@ -85,6 +113,11 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
+    public void handleAnimalClicked(List<AbstractAnimal> animals) {
+        for (AbstractAnimal animal : animals) {
+            informationAnimalController.setAnimal(animal);
+        }
+    }
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst()); // hack to retain visible grid lines
@@ -105,6 +138,11 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void init(AbstractWorldMap map, Simulation simulation) {
         setWorldMap(map);
+        this.simulation = simulation;
+
+        detailsSimulationController.setStatisticSimulation(simulation.getStatisticSimulation());
+        simulation.subscribe((simulation1) -> informationAnimalController.updateInformation(), Simulation.SimulationEventType.CHANGE);
+        simulation.subscribe((simulation1) -> detailsSimulationController.onUpdateDetails(), Simulation.SimulationEventType.CHANGE);
 
 //        map.subscribe(new ConsoleMapDisplay());
 
@@ -112,9 +150,14 @@ public class SimulationPresenter implements MapChangeListener {
 
     }
 
-    public void onSimulationStartClicked(ActionEvent actionEvent) {
+    public void onSimulationControlButtonClick(ActionEvent actionEvent) {
+        if (simulation.isPaused()) {
+            simulation.resume();
+            controlButton.setText("Pause");
+        } else {
+            simulation.pause();
+            controlButton.setText("Resume");
+        }
     }
 
-    public void onSimulationPauseClicked(ActionEvent actionEvent) {
-    }
 }

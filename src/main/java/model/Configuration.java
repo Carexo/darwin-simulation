@@ -33,25 +33,25 @@ public class Configuration {
         AGING
     }
 
-    private MapType mapType = MapType.OCEAN_MAP;
+    private MapType mapType = MapType.EARTH_MAP;
     private int mapWidth = 10;
     private int mapHeight = 10;
     private int startingGrassCount = 10;
     private int grassGrowthPerDay = 1;
     private int grassEnergyLevel = 5;
-    private int startingAnimalsCount = 2;
-    private int animalStartingEnergy = 100;
-    private int animalEnergyLossPerMove = 1;
+    private int startingAnimalsCount = 5;
+    private int animalStartingEnergy = 15;
+    private int animalEnergyLossPerMove = 2;
     private int animalReadyToBreedEnergyLevel = 50;
     private int animalEnergyGivenToChild = 20;
     private AnimalType animalType = AnimalType.NORMAL;
     private int genomeLength = 8;
     private int minimalMutationsCount = 1;
     private int maximalMutationsCount = 3;
-    private int startingOceanCount = 10;
+    private int startingOceanCount = 4;
+    private int oceanChangeRate = 10;
+    private int simulationSpeed = 1500;
     private int waterSegments = 3;
-    private int oceanChangeRate = 4;
-    private int simulationSpeed = 1000;
     private int totalSimulationDays = Integer.MAX_VALUE;
     private double chanceOfAnimalSkipMove = 0.1;
 

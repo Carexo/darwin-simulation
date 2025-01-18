@@ -143,6 +143,10 @@ public abstract class AbstractAnimal implements WorldElement {
         return children.size();
     }
 
+    public int getDescendantCount() {
+        return children.stream().mapToInt(AbstractAnimal::getDescendantCount).sum() + children.size();
+    }
+
     public int getEatenGrass() {
     return eatenGrass;
 }
@@ -157,5 +161,13 @@ public abstract class AbstractAnimal implements WorldElement {
 
     public int getAge() {
         return age;
+    }
+
+    public int getDiedAt() {
+        return diedAt;
+    }
+
+    public Genome getGenome() {
+        return genome;
     }
 }

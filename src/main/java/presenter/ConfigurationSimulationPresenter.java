@@ -13,7 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Configuration;
-import model.Simulation;
+import model.simulation.Simulation;
 import model.map.AbstractWorldMap;
 
 import java.io.IOException;
@@ -121,7 +121,6 @@ public class ConfigurationSimulationPresenter {
             stage.setTitle(simulation.getSimulationId().toString());
 
             stagesList.add(stage);
-            stage.setResizable(false);
             stage.show();
 
             notifyInfo("Successfully started simulation");
@@ -129,7 +128,8 @@ public class ConfigurationSimulationPresenter {
             notifyError("Parsing configuration failed. Can't start simulation.");
             System.out.println("Parsing configuration failed. Can't start simulation: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Could not load fxml file: " + ex.getMessage());
+            ex.printStackTrace();
+//            System.out.println("Could not load fxml file: " + ex.getMessage());
             Platform.exit();
         } catch (IllegalArgumentException ex) {
             notifyError(ex.getMessage());
