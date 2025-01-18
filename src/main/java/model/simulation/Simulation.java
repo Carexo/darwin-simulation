@@ -1,5 +1,6 @@
-package model;
+package model.simulation;
 
+import model.Configuration;
 import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.animal.AbstractAnimal;
@@ -13,16 +14,25 @@ import model.util.RandomPositionGenerator;
 import java.util.*;
 
 public class Simulation implements Runnable {
-    protected final UUID simulationId = UUID.randomUUID();
-    protected int dayNumber = 0;
-    protected final AbstractWorldMap map;
-    protected Configuration configuration;
+    private final UUID simulationId = UUID.randomUUID();
+    private int dayNumber = 0;
+    private boolean isPaused = false;
+    private final AbstractWorldMap map;
+    private final StatisticSimulation statisticSimulation;
+    private final Configuration configuration;
+    private final Map<SimulationEventType, List<SimulationChangeListener>> listeners = new HashMap<>();
+
+    public enum SimulationEventType {
+        CHANGE,
+        END
+    }
 
     public Simulation(AbstractWorldMap map, Configuration configuration) {
         this.map = map;
         this.configuration = configuration;
         RandomPositionGenerator randomPositionGenerator = null;
 
+        this.statisticSimulation = new StatisticSimulation(map);
         if (map instanceof TidesMap) {
             List<Vector2D> keyList = new ArrayList<Vector2D>(((TidesMap) map).getWaterMap().keySet());
             randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount(), keyList);
@@ -41,10 +51,31 @@ public class Simulation implements Runnable {
         }
     }
 
+    public void subscribe(SimulationChangeListener listener, SimulationEventType eventType) {
+        if (!listeners.containsKey(eventType)) {
+            listeners.put(eventType, new ArrayList<>());
+        }
+
+        listeners.get(eventType).add(listener);
+    }
+
+    private void notifyListeners(SimulationEventType type) {
+        if (!listeners.containsKey(type)) {
+            return;
+        }
+
+        for (SimulationChangeListener listener : listeners.get(type)) {
+            listener.onSimulationChange(this);
+        }
+    }
 
     public void run() {
         try {
             while (SimulationCanRun()) {
+                if (isPaused) {
+                    continue;
+                }
+
                 dayNumber++;
 
                 if(map instanceof TidesMap) {
@@ -60,11 +91,15 @@ public class Simulation implements Runnable {
                 map.growPlants();
                 agingAnimals();
 
+                notifyListeners(SimulationEventType.CHANGE);
+
                 Thread.sleep(configuration.getSimulationSpeed());
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        notifyListeners(SimulationEventType.END);
     }
 
     public boolean SimulationCanRun() {
@@ -74,8 +109,11 @@ public class Simulation implements Runnable {
     protected void removeDeathAnimal() {
         List<AbstractAnimal> deadAnimals = AnimalUtils.getDeathAnimals(map.getAnimalsList());
 
-        deadAnimals.forEach(map::remove);
-        deadAnimals.forEach(animal -> animal.setDiedAt(dayNumber));
+        deadAnimals.forEach((animal) -> {
+            map.remove(animal);
+            animal.setDiedAt(dayNumber);
+            statisticSimulation.addDiedAnimal(animal);
+        });
     }
 
     protected void animalEats() {
@@ -122,7 +160,27 @@ public class Simulation implements Runnable {
         map.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(((TidesMap)map).getWaterMap().containsKey(v)){animal.die(0);}}));
     }
 
+    public void pause() {
+        isPaused = true;
+    }
+
+    public void resume() {
+        isPaused = false;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
     public UUID getSimulationId() {
         return simulationId;
+    }
+
+    public AbstractWorldMap getMap() {
+        return map;
+    }
+
+    public StatisticSimulation getStatisticSimulation() {
+        return statisticSimulation;
     }
 }
