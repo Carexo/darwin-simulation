@@ -80,4 +80,8 @@ public class InformationAnimal {
         aliveStatus.setText("");
         aliveStatusTitle.setText("Age:");
     }
+
+    public AbstractAnimal getSelectedAnimal() {
+        return selectedAnimal;
+    }
 }

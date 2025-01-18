@@ -8,10 +8,16 @@ import java.util.*;
 
 public class StatisticSimulation {
     private final AbstractWorldMap map;
-    private List<AbstractAnimal> diedAnimals = new ArrayList<>();
+    private final Simulation simulation;
+    private final List<AbstractAnimal> diedAnimals = new ArrayList<>();
 
-    public StatisticSimulation(AbstractWorldMap map) {
-        this.map = map;
+    public StatisticSimulation(Simulation simulation) {
+        this.map = simulation.getMap();
+        this.simulation = simulation;
+    }
+
+    public int getDayNumber() {
+        return simulation.getDayNumber();
     }
 
     public int getAnimalsCount() {
@@ -85,8 +91,33 @@ public class StatisticSimulation {
         return genomeCount.entrySet().stream().max(Comparator.comparingInt(Map.Entry::getValue)).map(Map.Entry::getKey);
     }
 
+    public HashSet<AbstractAnimal> getAnimalsWithMostPopularGenome() {
+        Optional<Genome> mostPopularGenome = getMostPopularGenome();
+        HashSet<AbstractAnimal> animalsWithMostPopularGenome = new HashSet<>();
+
+        if (mostPopularGenome.isEmpty()) {
+            return animalsWithMostPopularGenome;
+        }
+
+        for (AbstractAnimal animal : map.getAnimalsList()) {
+            if (animal.getGenome().equals(mostPopularGenome.get())) {
+                animalsWithMostPopularGenome.add(animal);
+            }
+        }
+
+        return animalsWithMostPopularGenome;
+    }
+
 
     public void addDiedAnimal(AbstractAnimal animal) {
         diedAnimals.add(animal);
+    }
+
+    public String getCSVHeaders() {
+        return "Day number;Animals count;Plants count;Free positions count;Average animal energy;Average died animal lifespan;Average child count";
+    }
+
+    public String getCSVData() {
+        return getDayNumber() + ";" + getAnimalsCount() + ";" + getPlantsCount() + ";" + getFreePositionsCount() + ";" + getAverageAnimalEnergy() + ";" + getAverageDiedAnimalLifespan() + ";" + getAverageChildCount();
     }
 }

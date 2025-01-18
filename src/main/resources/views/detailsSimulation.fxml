@@ -3,12 +3,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="225.0" spacing="20" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.DetailsSimulation">
+<VBox prefHeight="400.0" prefWidth="225.0" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.DetailsSimulation">
     <VBox spacing="3">
+        <HBox>
+            <Label text="Day number:" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="dayNumber" />
+        </HBox>
         <HBox>
             <Label text="Animals count:" />
             <Pane HBox.hgrow="ALWAYS" />
-            <Label fx:id="animalsCount"  />
+            <Label fx:id="animalsCount" />
         </HBox>
         <HBox>
             <Label text="Plants count:" />
@@ -38,11 +43,12 @@
     </VBox>
     <VBox>
         <Label text="Most popular genome:" />
-      <ScrollPane prefHeight="200.0" prefWidth="200.0">
+      <ScrollPane prefHeight="45.0" prefWidth="205.0">
         <content>
             <Label fx:id="mostPopularGenome" />
         </content>
       </ScrollPane>
 
     </VBox>
+
 </VBox>

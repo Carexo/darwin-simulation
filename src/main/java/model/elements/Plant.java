@@ -1,5 +1,7 @@
 package model.elements;
 
+import javafx.scene.paint.Color;
+
 public class Plant implements WorldElement {
     private final Vector2D position;
 
@@ -20,5 +22,15 @@ public class Plant implements WorldElement {
     @Override
     public boolean isAt(Vector2D positionCheck) {
         return (position.equals(positionCheck));
+    }
+
+    @Override
+    public String getImageSource() {
+        return "images/plant.png";
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.GREEN;
     }
 }

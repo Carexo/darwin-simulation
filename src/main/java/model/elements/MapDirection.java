@@ -34,4 +34,6 @@ public enum MapDirection {
     public static MapDirection getRandom() {
         return values()[ThreadLocalRandom.current().nextInt(0, values().length)];
     }
+
+
 }

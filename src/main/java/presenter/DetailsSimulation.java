@@ -2,11 +2,14 @@ package presenter;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import model.elements.animal.Genome;
 import model.simulation.StatisticSimulation;
 
 public class DetailsSimulation {
+    @FXML
+    public Label dayNumber;
     @FXML
     private Label mostPopularGenome;
     @FXML
@@ -31,6 +34,7 @@ public class DetailsSimulation {
 
     public void onUpdateDetails() {
         Platform.runLater(() -> {
+            dayNumber.setText(String.valueOf(statisticSimulation.getDayNumber()));
             animalsCount.setText(String.valueOf(statisticSimulation.getAnimalsCount()));
             plantsCount.setText(String.valueOf(statisticSimulation.getPlantsCount()));
             freePositionsCount.setText(String.valueOf(statisticSimulation.getFreePositionsCount()));

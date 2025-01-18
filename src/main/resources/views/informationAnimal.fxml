@@ -13,14 +13,14 @@
             <HBox>
                <Label text="Eaten plants:" />
                 <Pane HBox.hgrow="ALWAYS" />
-               <Label fx:id="eatenPlants"  alignment="CENTER" contentDisplay="CENTER"/>
+               <Label fx:id="eatenPlants" alignment="CENTER" contentDisplay="CENTER" />
             </HBox>
             <HBox>
                <Label text="Children count:" />
                 <Pane HBox.hgrow="ALWAYS" />
                <Label fx:id="childrenCount" />
             </HBox>
-            <HBox >
+            <HBox>
                <Label text="Descendant:" />
                 <Pane HBox.hgrow="ALWAYS" />
                <Label fx:id="descendantCount" />
@@ -31,8 +31,8 @@
                <Label fx:id="aliveStatus" />
             </HBox>
    </VBox>
-   <VBox >
+   <VBox>
          <Label text="Genome:" />
-         <ListView fx:id="genome" editable="true" prefHeight="177.0" prefWidth="205.0" />
+         <ListView fx:id="genome" editable="true" orientation="HORIZONTAL" prefHeight="50.0" prefWidth="205.0" />
    </VBox>
 </VBox>

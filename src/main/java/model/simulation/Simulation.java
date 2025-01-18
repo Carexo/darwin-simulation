@@ -24,15 +24,17 @@ public class Simulation implements Runnable {
 
     public enum SimulationEventType {
         CHANGE,
-        END
+        END,
+        RESUME,
+        PAUSED
     }
 
     public Simulation(AbstractWorldMap map, Configuration configuration) {
         this.map = map;
         this.configuration = configuration;
         RandomPositionGenerator randomPositionGenerator = null;
+        this.statisticSimulation = new StatisticSimulation(this);
 
-        this.statisticSimulation = new StatisticSimulation(map);
         if (map instanceof TidesMap) {
             List<Vector2D> keyList = new ArrayList<Vector2D>(((TidesMap) map).getWaterMap().keySet());
             randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount(), keyList);
@@ -69,7 +71,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    public void run() {
+    public synchronized void run() {
         try {
             while (SimulationCanRun()) {
                 if (isPaused) {
@@ -162,10 +164,12 @@ public class Simulation implements Runnable {
 
     public void pause() {
         isPaused = true;
+        notifyListeners(SimulationEventType.PAUSED);
     }
 
     public void resume() {
         isPaused = false;
+        notifyListeners(SimulationEventType.RESUME);
     }
 
     public boolean isPaused() {
@@ -178,6 +182,10 @@ public class Simulation implements Runnable {
 
     public AbstractWorldMap getMap() {
         return map;
+    }
+
+    public int getDayNumber() {
+        return dayNumber;
     }
 
     public StatisticSimulation getStatisticSimulation() {

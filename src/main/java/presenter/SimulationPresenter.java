@@ -6,42 +6,46 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import model.simulation.Simulation;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
 import model.map.AbstractWorldMap;
-import model.map.MapChangeListener;
-import model.map.WorldMap;
-import model.simulation.StatisticSimulation;
+import presenter.boxes.WorldElementBoxFactory;
 
-import java.util.List;
+import java.util.HashSet;
 
 
-public class SimulationPresenter implements MapChangeListener {
-    @FXML
-    public Label infoMove;
+public class SimulationPresenter {
+    private static final int MAX_CELL_SIZE = 50;
+    private static final int MIN_CELL_SIZE = 3;
 
     @FXML
     public GridPane mapGrid;
     @FXML
     public Button controlButton;
+    @FXML
+    public Label simulationInfo;
+    @FXML
+    public Button showPopularGenome;
+    @FXML
+    public Button showPlantsPosition;
 
     @FXML
     private InformationAnimal informationAnimalController;
     @FXML
     private DetailsSimulation detailsSimulationController;
-
+    private boolean showAnimalsWithPopularGenome = false;
 
     private AbstractWorldMap map;
     private Simulation simulation;
+    private WorldElementBoxFactory worldElementBoxFactory;
+    private int cellSize = 30;
+    private HashSet<AbstractAnimal> animalsWithPopularGenome = new HashSet<>();
 
     public void setWorldMap(AbstractWorldMap map) {
         this.map = map;
@@ -55,8 +59,8 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void xyLabel() {
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(30));
-        mapGrid.getRowConstraints().add(new RowConstraints(30));
+        mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
+        mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         Label label = new Label("y/x");
         mapGrid.add(label, 0, 0);
         GridPane.setHalignment(label, HPos.CENTER);
@@ -66,7 +70,7 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < map.getWidth(); i++) {
             Label label = new Label(Integer.toString(i));
             GridPane.setHalignment(label, HPos.CENTER);
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(30));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
             mapGrid.add(label, i + 1, 0);
         }
     }
@@ -75,7 +79,7 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = map.getHeight() - 1; i >= 0; i--) {
             Label label = new Label(Integer.toString(map.getHeight() - i - 1));
             GridPane.setHalignment(label, HPos.CENTER);
-            mapGrid.getRowConstraints().add(new RowConstraints(30));
+            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
             mapGrid.add(label, 0, i + 1);
         }
     }
@@ -84,28 +88,30 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < map.getWidth(); i++) {
             for (int j = map.getHeight() - 1; j >= 0; j--) {
                 Vector2D position = new Vector2D(i, j);
-                Label label = new Label(" ");
-                label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Make label fill the cell
-                label.setAlignment(Pos.CENTER);
-
 
                 if (map.isOccupied(position)) {
                     WorldElement element = map.objectsAt(position).toList().getFirst();
-                    List<AbstractAnimal> animals = map.getAnimals().get(position);
 
-                    if (animals != null) {
-                        label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    if (element instanceof AbstractAnimal animal) {
+                        boolean isTracked = informationAnimalController.getSelectedAnimal() == animal || (showAnimalsWithPopularGenome && animalsWithPopularGenome.contains(animal));
+                        Pane pane = worldElementBoxFactory.createAnimalBox(animal, isTracked);
+                        mapGrid.add(pane, i + 1,  map.getHeight() - j);
+
+
+                        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent event) {
-                                handleAnimalClicked(animals);
+                                handleAnimalClicked(animal);
                             }
                         });
+
+                    } else {
+                        Pane pane = worldElementBoxFactory.createWorldElementBox(element);
+                        mapGrid.add(pane, i + 1,  map.getHeight() - j);
                     }
 
-                    label.setText(element.toString());
-                    mapGrid.add(label, i + 1,  map.getHeight() - j);
                 } else {
-                    mapGrid.add(label, i + 1, map.getHeight() - j);
+                    mapGrid.add(new Label(" "), i + 1, map.getHeight() - j);
                 }
 
                 GridPane.setHalignment(mapGrid.getChildren().getLast(), HPos.CENTER);
@@ -113,41 +119,57 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
-    public void handleAnimalClicked(List<AbstractAnimal> animals) {
-        for (AbstractAnimal animal : animals) {
-            informationAnimalController.setAnimal(animal);
-        }
+    public void handleAnimalClicked(AbstractAnimal animal) {
+        informationAnimalController.setAnimal(animal);
+        mapChanged();
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst()); // hack to retain visible grid lines
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst());
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
 
-    @Override
-    public void mapChanged(WorldMap map, String message) {
+    public void mapChanged() {
         Platform.runLater(() -> {
             clearGrid();
             drawMap();
-            infoMove.setText(message);
         });
     }
-
 
 
     public void init(AbstractWorldMap map, Simulation simulation) {
         setWorldMap(map);
         this.simulation = simulation;
+        this.worldElementBoxFactory = new WorldElementBoxFactory(cellSize);
 
         detailsSimulationController.setStatisticSimulation(simulation.getStatisticSimulation());
+
         simulation.subscribe((simulation1) -> informationAnimalController.updateInformation(), Simulation.SimulationEventType.CHANGE);
         simulation.subscribe((simulation1) -> detailsSimulationController.onUpdateDetails(), Simulation.SimulationEventType.CHANGE);
+        simulation.subscribe((simulation1) -> mapChanged(), Simulation.SimulationEventType.CHANGE);
+        simulation.subscribe((simulation1) -> changeSimulationInfo("Simulation ended"), Simulation.SimulationEventType.END);
+        simulation.subscribe((simulation1) -> {
+            changeSimulationInfo("Simulation paused");
+            showPopularGenome.setDisable(false);
+            showPlantsPosition.setDisable(false);
 
-//        map.subscribe(new ConsoleMapDisplay());
+        }, Simulation.SimulationEventType.PAUSED);
+        simulation.subscribe((simulation1) -> {
+            changeSimulationInfo("Simulation is running");
+            showPopularGenome.setDisable(true);
+            showPlantsPosition.setDisable(true);
+            showAnimalsWithPopularGenome = false;
+        }, Simulation.SimulationEventType.RESUME);
+    }
 
-        map.subscribe(this);
+    public void calculateCellSize(double windowWidth, double windowHeight) {
+        int mapWidth = map.getWidth();
+        int mapHeight = map.getHeight();
 
+        cellSize = Math.min(Math.min((int) Math.round((windowWidth*0.6 / (mapWidth))), (int) Math.round((windowHeight*0.6 / (mapHeight)))), MAX_CELL_SIZE);
+        worldElementBoxFactory.setSize(cellSize);
+        mapChanged();
     }
 
     public void onSimulationControlButtonClick(ActionEvent actionEvent) {
@@ -158,6 +180,24 @@ public class SimulationPresenter implements MapChangeListener {
             simulation.pause();
             controlButton.setText("Resume");
         }
+    }
+
+    public void onShowPopularGenomeClick(ActionEvent actionEvent) {
+        showAnimalsWithPopularGenome = !showAnimalsWithPopularGenome;
+        if (showAnimalsWithPopularGenome) {
+           animalsWithPopularGenome = simulation.getStatisticSimulation().getAnimalsWithMostPopularGenome();
+        }
+        mapChanged();
+    }
+
+    public void onShowPlantsPreferredPositionClick(ActionEvent actionEvent) {
+//        detailsSimulationController.showPlantsPreferredPosition();
+    }
+
+    public void changeSimulationInfo(String message) {
+        Platform.runLater(() -> {
+            simulationInfo.setText(message);
+        });
     }
 
 }
