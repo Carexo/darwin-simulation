@@ -2,13 +2,10 @@ package presenter;
 
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import model.simulation.Simulation;
 import model.elements.Vector2D;
@@ -99,12 +96,7 @@ public class SimulationPresenter {
                         mapGrid.add(pane, i + 1,  map.getHeight() - j);
 
 
-                        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent event) {
-                                handleAnimalClicked(animal);
-                            }
-                        });
+                        pane.setOnMouseClicked(event -> handleAnimalClicked(animal));
 
                     } else {
                         Pane pane = worldElementBoxFactory.createWorldElementBox(element);
@@ -174,7 +166,7 @@ public class SimulationPresenter {
         mapChanged();
     }
 
-    public void onSimulationControlButtonClick(ActionEvent actionEvent) {
+    public void onSimulationControlButtonClick() {
         if (simulation.isPaused()) {
             simulation.resume();
             controlButton.setText("Pause");
@@ -184,7 +176,7 @@ public class SimulationPresenter {
         }
     }
 
-    public void onShowPopularGenomeClick(ActionEvent actionEvent) {
+    public void onShowPopularGenomeClick() {
         showAnimalsWithPopularGenome = !showAnimalsWithPopularGenome;
         if (showAnimalsWithPopularGenome) {
             informationAnimalController.unselectAnimal();
@@ -193,14 +185,12 @@ public class SimulationPresenter {
         mapChanged();
     }
 
-    public void onShowPlantsPreferredPositionClick(ActionEvent actionEvent) {
+    public void onShowPlantsPreferredPositionClick() {
 //        detailsSimulationController.showPlantsPreferredPosition();
     }
 
     public void changeSimulationInfo(String message) {
-        Platform.runLater(() -> {
-            simulationInfo.setText(message);
-        });
+        Platform.runLater(() -> simulationInfo.setText(message));
     }
 
 }

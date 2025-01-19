@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import presenter.ConfigurationSimulationPresenter;
-import presenter.SimulationPresenter;
 
 public class SimulationApp extends Application {
 
