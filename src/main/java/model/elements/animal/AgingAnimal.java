@@ -17,7 +17,7 @@ public class AgingAnimal extends AbstractAnimal {
 
     @Override
     public void move(MoveValidator moveValidator) {
-        double chanceOfSkipMove = configuration.getChanceOfAnimalSkipMove();
+        double chanceOfSkipMove = configuration.getChanceOfAnimalSkipMove() / 100;
         double ageFactor = Math.min(0.8, (double) getAge() / 100);
         double skipProbability = chanceOfSkipMove * ageFactor;
 

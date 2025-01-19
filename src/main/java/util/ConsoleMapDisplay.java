@@ -1,4 +1,4 @@
-package model.util;
+package util;
 
 import model.map.MapChangeListener;
 import model.map.WorldMap;

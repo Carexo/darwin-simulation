@@ -5,6 +5,7 @@ import model.elements.Vector2D;
 import model.elements.animal.AbstractAnimal;
 import model.elements.animal.Animal;
 import org.junit.jupiter.api.Test;
+import util.AnimalUtils;
 
 import java.util.List;
 

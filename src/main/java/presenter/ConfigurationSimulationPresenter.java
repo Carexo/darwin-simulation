@@ -11,12 +11,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Configuration;
 import model.simulation.Simulation;
 import model.map.AbstractWorldMap;
-import model.util.CSVWriter;
+import util.CSVWriter;
+import util.ValidationConfigurationException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,19 +32,19 @@ public class ConfigurationSimulationPresenter {
     public Label informationLabel;
 
     @FXML
-    public TextField mapWidthTextField;
+    public TextField mapWidth;
 
     @FXML
-    public TextField mapHeightTextField;
+    public TextField mapHeight;
 
     @FXML
-    public TextField startingGrassCountTextField;
+    public TextField startingGrassCount;
 
     @FXML
-    public TextField grassGrowthPerDayTextField;
+    public TextField grassGrowthPerDay;
 
     @FXML
-    public TextField grassEnergyLevelTextField;
+    public TextField grassEnergyLevel;
 
     @FXML
     public ComboBox animalTypeSelector;
@@ -54,33 +56,45 @@ public class ConfigurationSimulationPresenter {
     public TextField animalStartingEnergy;
 
     @FXML
-    public TextField animalReadyToBreedEnergyLevelTextField;
+    public TextField animalReadyToBreedEnergyLevel;
 
     @FXML
-    public TextField animalEnergyLossPerMoveTextField;
+    public TextField animalEnergyLossPerMove;
 
     @FXML
-    public TextField animalEnergyGivenToChildTextField;
+    public TextField animalEnergyGivenToChild;
 
     @FXML
-    public TextField genomeLengthTextField;
+    public TextField genomeLength;
 
     @FXML
-    public TextField minimalMutationsCountTextField;
+    public TextField minimalMutationsCount;
 
     @FXML
-    public TextField maximalMutationsCountTextField;
+    public TextField maximalMutationsCount;
 
     @FXML
     public TextField simulationSpeed;
 
     @FXML
-    public TextField totalSimulationDaysTextField;
+    public TextField totalSimulationDays;
 
     @FXML
     public ComboBox mapTypeSelector;
     @FXML
     public CheckBox csvStatisticSaving;
+    @FXML
+    public Pane mapPropertiesPane;
+    @FXML
+    public Pane animalPropertiesPane;
+    @FXML
+    public TextField chanceOfAnimalSkipMove;
+    @FXML
+    public TextField startingOceanCount;
+    @FXML
+    public TextField waterSegments;
+    @FXML
+    public TextField oceanChangeRate;
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
@@ -90,8 +104,9 @@ public class ConfigurationSimulationPresenter {
     }
 
     private Simulation getSimulation(SimulationPresenter simulationPresenter) {
-//        Configuration configuration = getConfiguration();
-        Configuration configuration = new Configuration();
+        Configuration configuration = getConfiguration();
+//        Configuration configuration = new Configuration();
+        Configuration.validate(configuration);
 
         AbstractWorldMap map = configuration.getSelectedMap();
 
@@ -143,12 +158,11 @@ public class ConfigurationSimulationPresenter {
             notifyInfo("Successfully started simulation");
         } catch (NumberFormatException ex) {
             notifyError("Parsing configuration failed. Can't start simulation.");
-            System.out.println("Parsing configuration failed. Can't start simulation: " + ex.getMessage());
         } catch (IOException ex) {
             ex.printStackTrace();
 //            System.out.println("Could not load fxml file: " + ex.getMessage());
             Platform.exit();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException | ValidationConfigurationException ex) {
             notifyError(ex.getMessage());
         }
     }
@@ -162,6 +176,20 @@ public class ConfigurationSimulationPresenter {
     }
 
     public void onMapSelected(ActionEvent actionEvent) {
+        if (mapTypeSelector.getValue().equals("Earth")) {
+            mapPropertiesPane.setDisable(true);
+        } else if (mapTypeSelector.getValue().equals("Ocean")) {
+            mapPropertiesPane.setDisable(false);
+        }
+    }
+
+
+    public void onAnimalSelect(ActionEvent actionEvent) {
+        if (animalTypeSelector.getValue().equals("Normal")) {
+            animalPropertiesPane.setDisable(true);
+        } else if (animalTypeSelector.getValue().equals("Aging")) {
+            animalPropertiesPane.setDisable(false);
+        }
     }
 
     public void onConfigurationSaveClick(ActionEvent actionEvent) {
@@ -173,18 +201,19 @@ public class ConfigurationSimulationPresenter {
     public void onConfigurationLoadClick(ActionEvent actionEvent) {
     }
 
-    public void onAnimalSelect(ActionEvent actionEvent) {
-    }
 
     private Configuration getConfiguration() throws NumberFormatException {
         Configuration configuration = new Configuration();
 
         //  map configuration
-        configuration.setMapWidth(Integer.parseInt(mapWidthTextField.getText()));
-        configuration.setMapHeight(Integer.parseInt(mapHeightTextField.getText()));
-        configuration.setStartingGrassCount(Integer.parseInt(startingGrassCountTextField.getText()));
-        configuration.setGrassGrowthPerDay(Integer.parseInt(grassGrowthPerDayTextField.getText()));
-        configuration.setGrassEnergyLevel(Integer.parseInt(grassEnergyLevelTextField.getText()));
+        configuration.setMapWidth(Integer.parseInt(mapWidth.getText()));
+        configuration.setMapHeight(Integer.parseInt(mapHeight.getText()));
+        configuration.setStartingGrassCount(Integer.parseInt(startingGrassCount.getText()));
+        configuration.setGrassGrowthPerDay(Integer.parseInt(grassGrowthPerDay.getText()));
+        configuration.setGrassEnergyLevel(Integer.parseInt(grassEnergyLevel.getText()));
+        configuration.setStartingOceanCount(Integer.parseInt(startingOceanCount.getText()));
+        configuration.setWaterSegments(Integer.parseInt(waterSegments.getText()));
+        configuration.setOceanChangeRate(Integer.parseInt(oceanChangeRate.getText()));
 
         if (mapTypeSelector.getValue().equals("Earth")) {
             configuration.setMapType(Configuration.MapType.EARTH_MAP);
@@ -201,18 +230,19 @@ public class ConfigurationSimulationPresenter {
 
         configuration.setStartingAnimalsCount(Integer.parseInt(startingAnimalsCount.getText()));
         configuration.setAnimalStartingEnergy(Integer.parseInt(animalStartingEnergy.getText()));
-        configuration.setAnimalReadyToBreedEnergyLevel(Integer.parseInt(animalReadyToBreedEnergyLevelTextField.getText()));
-        configuration.setAnimalEnergyLossPerMove(Integer.parseInt(animalEnergyLossPerMoveTextField.getText()));
-        configuration.setAnimalEnergyGivenToChild(Integer.parseInt(animalEnergyGivenToChildTextField.getText()));
+        configuration.setAnimalReadyToBreedEnergyLevel(Integer.parseInt(animalReadyToBreedEnergyLevel.getText()));
+        configuration.setAnimalEnergyLossPerMove(Integer.parseInt(animalEnergyLossPerMove.getText()));
+        configuration.setAnimalEnergyGivenToChild(Integer.parseInt(animalEnergyGivenToChild.getText()));
+        configuration.setChanceOfAnimalSkipMove(Integer.parseInt(chanceOfAnimalSkipMove.getText()));
 
         // genome configuration
-        configuration.setGenomeLength(Integer.parseInt(genomeLengthTextField.getText()));
-        configuration.setMinimalMutationsCount(Integer.parseInt(minimalMutationsCountTextField.getText()));
-        configuration.setMaximalMutationsCount(Integer.parseInt(maximalMutationsCountTextField.getText()));
+        configuration.setGenomeLength(Integer.parseInt(genomeLength.getText()));
+        configuration.setMinimalMutationsCount(Integer.parseInt(minimalMutationsCount.getText()));
+        configuration.setMaximalMutationsCount(Integer.parseInt(maximalMutationsCount.getText()));
 
         // simulation configuration
         configuration.setSimulationSpeed(Integer.parseInt(simulationSpeed.getText()));
-        configuration.setTotalSimulationDays(Integer.parseInt(totalSimulationDaysTextField.getText()));
+        configuration.setTotalSimulationDays(Integer.parseInt(totalSimulationDays.getText()));
 
         // simulation configuration
         configuration.setCsvStatisticSaving(csvStatisticSaving.isSelected());

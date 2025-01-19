@@ -1,4 +1,4 @@
-package model.util;
+package util;
 
 import model.simulation.Simulation;
 import model.simulation.SimulationChangeListener;
