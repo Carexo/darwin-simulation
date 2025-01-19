@@ -26,3 +26,10 @@
     -fx-stroke: yellow;
     -fx-stroke-width: 1;
 }
+
+.axis-label {
+    -fx-background-color: #fff2bc;
+    -fx-alignment: center;
+    -fx-border-color: #ac9333;
+    -fx-border-width: 1px;
+}

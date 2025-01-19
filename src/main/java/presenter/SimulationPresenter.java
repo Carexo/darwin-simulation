@@ -15,6 +15,7 @@ import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
 import model.map.AbstractWorldMap;
+import presenter.boxes.AxisLabel;
 import presenter.boxes.WorldElementBoxFactory;
 
 import java.util.HashSet;
@@ -61,14 +62,14 @@ public class SimulationPresenter {
     public void xyLabel() {
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
-        Label label = new Label("y/x");
+        Label label = new AxisLabel("y/x", cellSize);
         mapGrid.add(label, 0, 0);
         GridPane.setHalignment(label, HPos.CENTER);
     }
 
     private void xLabel() {
         for (int i = 0; i < map.getWidth(); i++) {
-            Label label = new Label(Integer.toString(i));
+            Label label = new AxisLabel(Integer.toString(i), cellSize);
             GridPane.setHalignment(label, HPos.CENTER);
             mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
             mapGrid.add(label, i + 1, 0);
@@ -77,7 +78,7 @@ public class SimulationPresenter {
 
     private void yLabel() {
         for (int i = map.getHeight() - 1; i >= 0; i--) {
-            Label label = new Label(Integer.toString(map.getHeight() - i - 1));
+            Label label = new AxisLabel(Integer.toString(map.getHeight() - i - 1), cellSize);
             GridPane.setHalignment(label, HPos.CENTER);
             mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
             mapGrid.add(label, 0, i + 1);
@@ -93,7 +94,7 @@ public class SimulationPresenter {
                     WorldElement element = map.objectsAt(position).toList().getFirst();
 
                     if (element instanceof AbstractAnimal animal) {
-                        boolean isTracked = informationAnimalController.getSelectedAnimal() == animal || (showAnimalsWithPopularGenome && animalsWithPopularGenome.contains(animal));
+                        boolean isTracked = informationAnimalController.getSelectedAnimal().map(animal::equals).orElse(false) || (showAnimalsWithPopularGenome && animalsWithPopularGenome.contains(animal));
                         Pane pane = worldElementBoxFactory.createAnimalBox(animal, isTracked);
                         mapGrid.add(pane, i + 1,  map.getHeight() - j);
 
@@ -167,7 +168,8 @@ public class SimulationPresenter {
         int mapWidth = map.getWidth();
         int mapHeight = map.getHeight();
 
-        cellSize = Math.min(Math.min((int) Math.round((windowWidth*0.6 / (mapWidth))), (int) Math.round((windowHeight*0.6 / (mapHeight)))), MAX_CELL_SIZE);
+        cellSize = Math.max(Math.min(Math.min((int) Math.round((windowWidth*0.85 / (mapWidth))), (int) Math.round((windowHeight*0.85 / (mapHeight)))), MAX_CELL_SIZE), MIN_CELL_SIZE);
+
         worldElementBoxFactory.setSize(cellSize);
         mapChanged();
     }
@@ -185,6 +187,7 @@ public class SimulationPresenter {
     public void onShowPopularGenomeClick(ActionEvent actionEvent) {
         showAnimalsWithPopularGenome = !showAnimalsWithPopularGenome;
         if (showAnimalsWithPopularGenome) {
+            informationAnimalController.unselectAnimal();
            animalsWithPopularGenome = simulation.getStatisticSimulation().getAnimalsWithMostPopularGenome();
         }
         mapChanged();

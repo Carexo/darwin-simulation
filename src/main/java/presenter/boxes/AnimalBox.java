@@ -3,12 +3,15 @@ package presenter.boxes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import model.elements.MapDirection;
@@ -24,7 +27,7 @@ public class AnimalBox extends Pane {
     private static final int WIDTH    = 24;
     private static final int HEIGHT   = 32;
 
-    public AnimalBox(AbstractAnimal animal, boolean tracked) {
+    public AnimalBox(AbstractAnimal animal, boolean tracked, int size) {
         MapDirection direction = animal.getDirection().shift(animal.getGenome().getActiveGene());
 
         int offsetDireciton = switch (direction) {
@@ -42,9 +45,6 @@ public class AnimalBox extends Pane {
         // Set the initial viewport
         imageView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y  + offsetDireciton*HEIGHT, WIDTH, HEIGHT));
 
-
-        // Create a pane to hold the image view
-        this.getChildren().add(imageView);
 
         // Create the timeline for the animation
         final Timeline timeline = new Timeline();
@@ -64,8 +64,25 @@ public class AnimalBox extends Pane {
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
 
+
+        ProgressBar hpBar = createHpBar(animal.getEnergyLevel(), size);
+        StackPane stackPane = new StackPane(imageView, hpBar);
+
+        // Add the HP bar to the pane
+        this.getChildren().add(stackPane);
+
         if(tracked) {
             this.getStyleClass().add("selected-animal");
         }
+    }
+
+    private ProgressBar createHpBar (double animalHealth, int size) {
+        ProgressBar hpBar = new ProgressBar();
+        hpBar.setProgress(animalHealth); // Assuming energy level is out of 100
+        hpBar.setMaxWidth(size * 0.8);
+        hpBar.setStyle("-fx-accent: green;");
+        hpBar.setTranslateY(-size * 0.4);
+        hpBar.setMaxHeight(size * 0.2);
+        return hpBar;
     }
 }
