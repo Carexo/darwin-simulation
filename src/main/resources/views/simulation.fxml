@@ -14,10 +14,8 @@
        <VBox alignment="CENTER" prefHeight="492.0" prefWidth="212.0" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
             <fx:include fx:id="detailsSimulation" source="detailsSimulation.fxml" />
            <VBox alignment="CENTER" spacing="10">
-               <children>
                    <Button fx:id="showPopularGenome" disable="true" onAction="#onShowPopularGenomeClick" prefHeight="55.0" prefWidth="192.0" text="Show animals with popular genome" textAlignment="CENTER" wrapText="true" />
                    <Button fx:id="showPlantsPosition" disable="true" onAction="#onShowPlantsPreferredPositionClick" prefWidth="Infinity" text="Show plants preferred positions" textAlignment="CENTER" wrapText="true" />
-               </children>
            </VBox>
        </VBox>
 
@@ -32,9 +30,7 @@
    </right>
    <bottom>
       <HBox alignment="CENTER" prefHeight="38.0" prefWidth="850.0" BorderPane.alignment="CENTER">
-         <children>
                   <Button fx:id="controlButton" alignment="CENTER" onAction="#onSimulationControlButtonClick" text="Pause" />
-         </children>
       </HBox>
    </bottom>
 </BorderPane>
