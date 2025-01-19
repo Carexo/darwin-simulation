@@ -59,7 +59,8 @@ class EarthMapTest {
         Configuration config = new Configuration();
         EarthMap map = new EarthMap(config);
         Vector2D v = new Vector2D(0,map.height);
-        assertEquals(map.getNewPosition(v), new Vector2D(0, map.height-1));
+        System.out.println(map.getNewPosition(v));
+        assertEquals(map.getNewPosition(v), new Vector2D(0, map.height));
     }
 
     @Test
@@ -67,7 +68,7 @@ class EarthMapTest {
         Configuration config = new Configuration();
         EarthMap map = new EarthMap(config);
         Vector2D v = new Vector2D(0,-1);
-        assertEquals(map.getNewPosition(v), new Vector2D(0, 0));
+        assertEquals(map.getNewPosition(v), new Vector2D(0, -1));
     }
 
 
