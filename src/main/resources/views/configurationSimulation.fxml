@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane minHeight="400" minWidth="400" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.ConfigurationSimulationPresenter">
+<BorderPane minHeight="400" minWidth="400" stylesheets="@../styles/configurationSimulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.ConfigurationSimulationPresenter">
     <top>
         <HBox alignment="CENTER" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
                 <Label fx:id="informationLabel" alignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
@@ -18,84 +18,96 @@
     <center>
         <VBox style="-fx-padding: 10;" BorderPane.alignment="CENTER">
             <HBox spacing="20.0">
-                <VBox spacing="5.0">
-                    <Label text="Map settings:" />
-                    <Label text="Map type:" />
-                    <ComboBox fx:id="mapTypeSelector" maxWidth="1.7976931348623157E308" onAction="#onMapSelected" value="Earth">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Ocean" />
-                                <String fx:value="Earth" />
-                            </FXCollections>
-                        </items>
-                    </ComboBox>
-                    <Label text="Map width:" />
-                    <TextField fx:id="mapWidth" />
-                    <Label text="Map height:" />
-                    <TextField fx:id="mapHeight" />
-                    <Label text="Starting grass count:" />
-                    <TextField fx:id="startingGrassCount" />
-                    <Label text="Grass growth per day" />
-                    <TextField fx:id="grassGrowthPerDay" />
-                    <Label text="Grass energy level:" />
-                    <TextField fx:id="grassEnergyLevel" />
-                    <Pane fx:id="mapPropertiesPane" disable="true">
-                        <VBox>
-                            <Label text="Starting ocean count:" />
-                            <TextField fx:id="startingOceanCount" />
-                            <Label text="Water segments:" />
-                            <TextField fx:id="waterSegments" />
-                            <Label text="Ocean change rate: (how many days to change)" />
-                            <TextField fx:id="oceanChangeRate" />
-                        </VBox>
-                    </Pane>
+                <VBox spacing="15.0">
+
+                    <Label styleClass="configuration-title" text="Map settings" />
+                    <VBox spacing="5.0">
+                        <Label text="Map type:" />
+                        <ComboBox fx:id="mapTypeSelector" maxWidth="1.7976931348623157E308" onAction="#onMapSelected" value="Earth">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Ocean" />
+                                    <String fx:value="Earth" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Label text="Map width:" />
+                        <TextField fx:id="mapWidth" />
+                        <Label text="Map height:" />
+                        <TextField fx:id="mapHeight" />
+                        <Label text="Starting grass count:" />
+                        <TextField fx:id="startingGrassCount" />
+                        <Label text="Grass growth per day" />
+                        <TextField fx:id="grassGrowthPerDay" />
+                        <Label text="Grass energy level:" />
+                        <TextField fx:id="grassEnergyLevel" />
+                        <Pane fx:id="mapPropertiesPane" disable="true">
+                            <VBox>
+                                <Label text="Starting ocean count:" />
+                                <TextField fx:id="startingOceanCount" />
+                                <Label text="Water segments:" />
+                                <TextField fx:id="waterSegments" />
+                                <Label text="Ocean change rate: (how many days to change)" />
+                                <TextField fx:id="oceanChangeRate" />
+                            </VBox>
+                        </Pane>
+
+                    </VBox>
                 </VBox>
-                <VBox spacing="5.0">
-                    <Label text="Animal settings:" />
-                    <ComboBox fx:id="animalTypeSelector" maxWidth="1.7976931348623157E308" onAction="#onAnimalSelect" value="Normal">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Normal" />
-                                <String fx:value="Aging" />
-                            </FXCollections>
-                        </items>
-                    </ComboBox>
-                    <Label text="Starting animal count:" />
-                    <TextField fx:id="startingAnimalsCount" />
-                    <Label text="Animal starting energy:" />
-                    <TextField fx:id="animalStartingEnergy" />
-                    <Label text="Animal ready to breed energy level:" />
-                    <TextField fx:id="animalReadyToBreedEnergyLevel" />
-                    <Label text="Animal energy loss per move:" />
-                    <TextField fx:id="animalEnergyLossPerMove" />
-                    <Label text="Animal energy given to child:" />
-                    <TextField fx:id="animalEnergyGivenToChild" />
-                    <Pane fx:id="animalPropertiesPane" disable="true">
-                        <VBox>
-                            <Label text="Animal chance of skipped moved:" />
-                            <TextField fx:id="chanceOfAnimalSkipMove" />
-                        </VBox>
-                    </Pane>
+                <VBox spacing="15.0">
+                    <Label styleClass="configuration-title" text="Animal settings" />
+
+                    <VBox spacing="5.0">
+                        <Label text="Animal type:" />
+                        <ComboBox fx:id="animalTypeSelector" maxWidth="1.7976931348623157E308" onAction="#onAnimalSelect" value="Normal">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Normal" />
+                                    <String fx:value="Aging" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Label text="Starting animal count:" />
+                        <TextField fx:id="startingAnimalsCount" />
+                        <Label text="Animal starting energy:" />
+                        <TextField fx:id="animalStartingEnergy" />
+                        <Label text="Animal ready to breed energy level:" />
+                        <TextField fx:id="animalReadyToBreedEnergyLevel" />
+                        <Label text="Animal energy loss per move:" />
+                        <TextField fx:id="animalEnergyLossPerMove" />
+                        <Label text="Animal energy given to child:" />
+                        <TextField fx:id="animalEnergyGivenToChild" />
+                        <Pane fx:id="animalPropertiesPane" disable="true">
+                            <VBox>
+                                <Label text="Animal chance of skipped moved:" />
+                                <TextField fx:id="chanceOfAnimalSkipMove" />
+                            </VBox>
+                        </Pane>
+                    </VBox>
                 </VBox>
-                <VBox spacing="5.0">
-                    <Label text="Genome settings:" />
-                    <Label text="Genome length:" />
-                    <TextField fx:id="genomeLength" />
-                    <Label text="Minimal mutations count:" />
-                    <TextField fx:id="minimalMutationsCount" />
-                    <Label text="Maximal mutations count:" />
-                    <TextField fx:id="maximalMutationsCount" />
+                <VBox spacing="15.0">
+                    <Label styleClass="configuration-title" text="Genome settings" />
+                    <VBox spacing="5.0">
+                        <Label text="Genome length:" />
+                        <TextField fx:id="genomeLength" />
+                        <Label text="Minimal mutations count:" />
+                        <TextField fx:id="minimalMutationsCount" />
+                        <Label text="Maximal mutations count:" />
+                        <TextField fx:id="maximalMutationsCount" />
+                    </VBox>
                 </VBox>
-                <VBox spacing="5.0">
-                    <Label text="Simulation settings:" />
-                    <Label text="Milliseconds per simulation day:" />
-                    <TextField fx:id="simulationSpeed" VBox.vgrow="ALWAYS" />
-                    <Label text="Total simulation days:" />
-                    <TextField fx:id="totalSimulationDays" VBox.vgrow="ALWAYS" />
+                <VBox spacing="15.0">
+                    <Label styleClass="configuration-title" text="Simulation settings" />
+                    <VBox spacing="5.0">
+                        <Label text="Milliseconds per simulation day:" />
+                        <TextField fx:id="simulationSpeed" VBox.vgrow="ALWAYS" />
+                        <Label text="Total simulation days:" />
+                        <TextField fx:id="totalSimulationDays" VBox.vgrow="ALWAYS" />
+                    </VBox>
                 </VBox>
-                <VBox spacing="5.0">
+                <VBox spacing="15.0">
                     <Label text="Configuration settings:" VBox.vgrow="ALWAYS" />
-<!--                    <Label alignment="CENTER" text="Configuration name:"/>-->
+<!--                    <Label alignment="CENTER" text="Configuration name"/>-->
 <!--                    <TextField fx:id="configurationName"/>-->
 <!--                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
 <!--                            onAction="#onConfigurationSaveClick" text="Save configuration"/>-->
