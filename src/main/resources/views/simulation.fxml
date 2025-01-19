@@ -2,8 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane minHeight="850.0" minWidth="1050.0" stylesheets="@../styles/simulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.SimulationPresenter">
+<BorderPane minHeight="1000" minWidth="1250.0" stylesheets="@../styles/simulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.SimulationPresenter">
     <top>
         <VBox alignment="CENTER" prefHeight="46.0" prefWidth="850.0">
             <Label fx:id="simulationInfo" styleClass="info-move" text="Simulation is running" />
@@ -29,8 +30,11 @@
       </VBox>
    </right>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="38.0" prefWidth="850.0" BorderPane.alignment="CENTER">
-                  <Button fx:id="controlButton" alignment="CENTER" onAction="#onSimulationControlButtonClick" text="Pause" />
+      <HBox alignment="CENTER" prefHeight="38.0" prefWidth="850.0" style="-fx-padding: 5;" BorderPane.alignment="CENTER">
+                  <Button fx:id="controlButton" alignment="CENTER" onAction="#onSimulationControlButtonClick" text="Pause">
+            <font>
+               <Font size="20.0" />
+            </font></Button>
       </HBox>
    </bottom>
 </BorderPane>

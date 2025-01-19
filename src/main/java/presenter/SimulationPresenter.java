@@ -113,6 +113,7 @@ public class SimulationPresenter {
     }
 
     public void handleAnimalClicked(AbstractAnimal animal) {
+        hideAnimalPopularGenome();
         informationAnimalController.setAnimal(animal);
         mapChanged();
     }
@@ -183,6 +184,10 @@ public class SimulationPresenter {
            animalsWithPopularGenome = simulation.getStatisticSimulation().getAnimalsWithMostPopularGenome();
         }
         mapChanged();
+    }
+
+    private void hideAnimalPopularGenome() {
+        showAnimalsWithPopularGenome = false;
     }
 
     public void onShowPlantsPreferredPositionClick() {

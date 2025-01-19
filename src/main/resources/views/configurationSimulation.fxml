@@ -2,16 +2,21 @@
 
 <?import java.lang.*?>
 <?import javafx.collections.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane minHeight="400" minWidth="400" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.ConfigurationSimulationPresenter">
-    <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-    </padding>
+    <top>
+        <HBox alignment="CENTER" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
+                <Label fx:id="informationLabel" alignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="16.0" />
+            </font></Label>
+        </HBox>
+    </top>
     <center>
-        <VBox BorderPane.alignment="CENTER">
+        <VBox style="-fx-padding: 10;" BorderPane.alignment="CENTER">
             <HBox spacing="20.0">
                 <VBox spacing="5.0">
                     <Label text="Map settings:" />
@@ -25,23 +30,23 @@
                         </items>
                     </ComboBox>
                     <Label text="Map width:" />
-                    <TextField fx:id="mapWidthTextField" />
+                    <TextField fx:id="mapWidth" />
                     <Label text="Map height:" />
-                    <TextField fx:id="mapHeightTextField" />
+                    <TextField fx:id="mapHeight" />
                     <Label text="Starting grass count:" />
-                    <TextField fx:id="startingGrassCountTextField" />
+                    <TextField fx:id="startingGrassCount" />
                     <Label text="Grass growth per day" />
-                    <TextField fx:id="grassGrowthPerDayTextField" />
+                    <TextField fx:id="grassGrowthPerDay" />
                     <Label text="Grass energy level:" />
-                    <TextField fx:id="grassEnergyLevelTextField" />
+                    <TextField fx:id="grassEnergyLevel" />
                     <Pane fx:id="mapPropertiesPane" disable="true">
                         <VBox>
                             <Label text="Starting ocean count:" />
-                            <TextField fx:id="startingOceanCountTextField" />
-                            <Label text="Max ocean size: (how many blocks from center to expand)" />
-                            <TextField fx:id="maxOceanSizeTextField" />
+                            <TextField fx:id="startingOceanCount" />
+                            <Label text="Water segments:" />
+                            <TextField fx:id="waterSegments" />
                             <Label text="Ocean change rate: (how many days to change)" />
-                            <TextField fx:id="oceanChangeRateTextField" />
+                            <TextField fx:id="oceanChangeRate" />
                         </VBox>
                     </Pane>
                 </VBox>
@@ -60,11 +65,11 @@
                     <Label text="Animal starting energy:" />
                     <TextField fx:id="animalStartingEnergy" />
                     <Label text="Animal ready to breed energy level:" />
-                    <TextField fx:id="animalReadyToBreedEnergyLevelTextField" />
+                    <TextField fx:id="animalReadyToBreedEnergyLevel" />
                     <Label text="Animal energy loss per move:" />
-                    <TextField fx:id="animalEnergyLossPerMoveTextField" />
+                    <TextField fx:id="animalEnergyLossPerMove" />
                     <Label text="Animal energy given to child:" />
-                    <TextField fx:id="animalEnergyGivenToChildTextField" />
+                    <TextField fx:id="animalEnergyGivenToChild" />
                     <Pane fx:id="animalPropertiesPane" disable="true">
                         <VBox>
                             <Label text="Animal chance of skipped moved:" />
@@ -75,23 +80,23 @@
                 <VBox spacing="5.0">
                     <Label text="Genome settings:" />
                     <Label text="Genome length:" />
-                    <TextField fx:id="genomeLengthTextField" />
+                    <TextField fx:id="genomeLength" />
                     <Label text="Minimal mutations count:" />
-                    <TextField fx:id="minimalMutationsCountTextField" />
+                    <TextField fx:id="minimalMutationsCount" />
                     <Label text="Maximal mutations count:" />
-                    <TextField fx:id="maximalMutationsCountTextField" />
+                    <TextField fx:id="maximalMutationsCount" />
                 </VBox>
                 <VBox spacing="5.0">
                     <Label text="Simulation settings:" />
                     <Label text="Milliseconds per simulation day:" />
                     <TextField fx:id="simulationSpeed" VBox.vgrow="ALWAYS" />
                     <Label text="Total simulation days:" />
-                    <TextField fx:id="totalSimulationDaysTextField" VBox.vgrow="ALWAYS" />
+                    <TextField fx:id="totalSimulationDays" VBox.vgrow="ALWAYS" />
                 </VBox>
                 <VBox spacing="5.0">
                     <Label text="Configuration settings:" VBox.vgrow="ALWAYS" />
 <!--                    <Label alignment="CENTER" text="Configuration name:"/>-->
-<!--                    <TextField fx:id="configurationNameTextField"/>-->
+<!--                    <TextField fx:id="configurationName"/>-->
 <!--                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
 <!--                            onAction="#onConfigurationSaveClick" text="Save configuration"/>-->
 <!--                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
@@ -104,13 +109,12 @@
             </HBox>
         </VBox>
     </center>
-   <top>
-      <HBox alignment="CENTER" prefHeight="36.0" prefWidth="1099.0" BorderPane.alignment="CENTER">
+   <bottom>
+      <HBox alignment="BOTTOM_RIGHT" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
          <children>
-                <Label fx:id="informationLabel" />
-                <Pane prefHeight="81.0" prefWidth="949.0" HBox.hgrow="ALWAYS" />
-                <Button alignment="CENTER" minWidth="150.0" mnemonicParsing="false" onAction="#onSimulationStartClicked" text="Start" HBox.hgrow="ALWAYS" />
+                   <Button alignment="CENTER" minWidth="150.0" mnemonicParsing="false" onAction="#onSimulationStartClicked" text="Start" />
          </children>
       </HBox>
-   </top>
+   </bottom>
+
 </BorderPane>

@@ -5,7 +5,7 @@ import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
-import model.util.MapVisualizer;
+import util.MapVisualizer;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

@@ -8,8 +8,8 @@ import model.elements.animal.AgingAnimal;
 import model.elements.animal.Animal;
 import model.map.AbstractWorldMap;
 import model.map.TidesMap;
-import model.util.AnimalUtils;
-import model.util.RandomPositionGenerator;
+import util.AnimalUtils;
+import util.RandomPositionGenerator;
 
 import java.util.*;
 
