@@ -29,7 +29,7 @@ public class WorldElementBoxFactory {
             return pane;
         }
 
-        return new AnimalBox(animal, tracked);
+        return new AnimalBox(animal, tracked, size);
     }
 
     public Pane createWorldElementBox(WorldElement element) {

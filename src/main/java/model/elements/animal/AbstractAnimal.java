@@ -177,14 +177,19 @@ public abstract class AbstractAnimal implements WorldElement {
         return "images/animal.png";
     }
 
+    public double getHealth() {
+        double maxEnergy = configuration.getAnimalStartingEnergy();
+        return Math.min(energyLevel / maxEnergy, 1);
+    }
+
     @Override
     public Color getColor() {
-        double maxEnergy = configuration.getAnimalStartingEnergy();
-        double energyRatio = Math.min(energyLevel / maxEnergy, 1);
+
+        double health = getHealth();
 
         double red = 1.0;
-        double green = 1.0 - energyRatio;
-        double blue = 1.0 - energyRatio * 0.5;
+        double green = 1.0 - health;
+        double blue = 1.0 - health * 0.5;
 
         return Color.color(red, green, blue);
     }

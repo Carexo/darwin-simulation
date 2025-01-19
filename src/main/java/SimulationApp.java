@@ -33,5 +33,6 @@ public class SimulationApp extends Application {
         primaryStage.setTitle("Darwin Evolution Simulation");
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+        primaryStage.resizableProperty().setValue(Boolean.FALSE);
     }
 }

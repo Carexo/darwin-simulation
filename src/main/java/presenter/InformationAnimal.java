@@ -9,6 +9,8 @@ import model.elements.animal.AbstractAnimal;
 import model.elements.animal.Gene;
 import model.elements.animal.Genome;
 
+import java.util.Optional;
+
 public class InformationAnimal {
     @FXML
     public Label energyLevel;
@@ -39,6 +41,12 @@ public class InformationAnimal {
 
         updateInformation();
     }
+
+    public void unselectAnimal() {
+        selectedAnimal = null;
+        clearInformation();
+    }
+
 
     public void updateInformation() {
         if (selectedAnimal == null) {
@@ -81,7 +89,7 @@ public class InformationAnimal {
         aliveStatusTitle.setText("Age:");
     }
 
-    public AbstractAnimal getSelectedAnimal() {
-        return selectedAnimal;
+    public Optional<AbstractAnimal> getSelectedAnimal() {
+        return Optional.ofNullable(selectedAnimal);
     }
 }

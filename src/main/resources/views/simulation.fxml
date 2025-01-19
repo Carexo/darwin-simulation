@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane minHeight="550.0" minWidth="850.0" stylesheets="@../styles/simulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.SimulationPresenter">
+<BorderPane minHeight="850.0" minWidth="1050.0" stylesheets="@../styles/simulation.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presenter.SimulationPresenter">
     <top>
         <VBox alignment="CENTER" prefHeight="46.0" prefWidth="850.0">
             <Label fx:id="simulationInfo" styleClass="info-move" text="Simulation is running" />
@@ -15,8 +15,8 @@
             <fx:include fx:id="detailsSimulation" source="detailsSimulation.fxml" />
            <VBox alignment="CENTER" spacing="10">
                <children>
-                   <Button disable="true" fx:id="showPopularGenome" onAction="#onShowPopularGenomeClick" prefHeight="55.0" prefWidth="192.0" text="Show animals with popular genome" textAlignment="CENTER" wrapText="true" />
-                   <Button disable="true" fx:id="showPlantsPosition" onAction="#onShowPlantsPreferredPositionClick" prefWidth="Infinity" text="Show plants preferred positions" textAlignment="CENTER" wrapText="true" />
+                   <Button fx:id="showPopularGenome" disable="true" onAction="#onShowPopularGenomeClick" prefHeight="55.0" prefWidth="192.0" text="Show animals with popular genome" textAlignment="CENTER" wrapText="true" />
+                   <Button fx:id="showPlantsPosition" disable="true" onAction="#onShowPlantsPreferredPositionClick" prefWidth="Infinity" text="Show plants preferred positions" textAlignment="CENTER" wrapText="true" />
                </children>
            </VBox>
        </VBox>
