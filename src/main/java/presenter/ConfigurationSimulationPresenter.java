@@ -158,6 +158,7 @@ public class ConfigurationSimulationPresenter {
             notifyInfo("Successfully started simulation");
         } catch (NumberFormatException ex) {
             notifyError("Parsing configuration failed. Can't start simulation.");
+            System.out.println(ex.getMessage());
         } catch (IOException ex) {
             ex.printStackTrace();
 //            System.out.println("Could not load fxml file: " + ex.getMessage());
@@ -211,14 +212,15 @@ public class ConfigurationSimulationPresenter {
         configuration.setStartingGrassCount(Integer.parseInt(startingGrassCount.getText()));
         configuration.setGrassGrowthPerDay(Integer.parseInt(grassGrowthPerDay.getText()));
         configuration.setGrassEnergyLevel(Integer.parseInt(grassEnergyLevel.getText()));
-        configuration.setStartingOceanCount(Integer.parseInt(startingOceanCount.getText()));
-        configuration.setWaterSegments(Integer.parseInt(waterSegments.getText()));
-        configuration.setOceanChangeRate(Integer.parseInt(oceanChangeRate.getText()));
+
 
         if (mapTypeSelector.getValue().equals("Earth")) {
             configuration.setMapType(Configuration.MapType.EARTH_MAP);
         } else if (mapTypeSelector.getValue().equals("Ocean")) {
             configuration.setMapType(Configuration.MapType.OCEAN_MAP);
+            configuration.setStartingOceanCount(Integer.parseInt(startingOceanCount.getText()));
+            configuration.setWaterSegments(Integer.parseInt(waterSegments.getText()));
+            configuration.setOceanChangeRate(Integer.parseInt(oceanChangeRate.getText()));
         }
 
         // animal configuration
@@ -226,6 +228,7 @@ public class ConfigurationSimulationPresenter {
             configuration.setAnimalType(Configuration.AnimalType.NORMAL);
         } else if (animalTypeSelector.getValue().equals("Aging")) {
             configuration.setAnimalType(Configuration.AnimalType.AGING);
+            configuration.setChanceOfAnimalSkipMove(Integer.parseInt(chanceOfAnimalSkipMove.getText()));
         }
 
         configuration.setStartingAnimalsCount(Integer.parseInt(startingAnimalsCount.getText()));
@@ -233,7 +236,6 @@ public class ConfigurationSimulationPresenter {
         configuration.setAnimalReadyToBreedEnergyLevel(Integer.parseInt(animalReadyToBreedEnergyLevel.getText()));
         configuration.setAnimalEnergyLossPerMove(Integer.parseInt(animalEnergyLossPerMove.getText()));
         configuration.setAnimalEnergyGivenToChild(Integer.parseInt(animalEnergyGivenToChild.getText()));
-        configuration.setChanceOfAnimalSkipMove(Integer.parseInt(chanceOfAnimalSkipMove.getText()));
 
         // genome configuration
         configuration.setGenomeLength(Integer.parseInt(genomeLength.getText()));
