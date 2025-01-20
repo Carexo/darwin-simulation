@@ -76,9 +76,9 @@ Darwin Simulation is a Java-based application that simulates the evolution of an
 
 ## Screenshots
 
-[//]: # (### Configuration Window)
+### Configuration Window
 
-[//]: # (![Configuration Window]&#40;configuration.png "Configuration Window"&#41;)
+![Configuration Window](./images/configuration.png "Configuration Window")
 
 ### Example of Small Map
 ![Example of Small Map](./images/small_map.png "Example of small map")
