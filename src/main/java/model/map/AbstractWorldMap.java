@@ -55,37 +55,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    public void subscribe(MapChangeListener listener) {
-        listeners.add(listener);
-    }
-
-    public void unsubscribe(MapChangeListener listener) {
-        listeners.remove(listener);
-    }
-
-    protected void notify(String message) {
-        for (MapChangeListener listener : listeners) {
-            listener.mapChanged(this, message);
-        }
-    }
 
     public void remove(WorldElement element) {
         if (element instanceof AbstractAnimal) {
             removeAnimal((AbstractAnimal) element);
-            notify("Animal " + element + " was removed from the map");
         } else if (element instanceof Plant) {
             removePlant((Plant) element);
-            notify("Plant " + element + " was removed from the map");
         }
     }
 
     private void removePlant(Plant plant) {
-        if(!plants.isEmpty()) {
-            int index = ThreadLocalRandom.current().nextInt(plants.size());
-            plantSpaces.add(index + 1, plant.getPosition());
-        } else {
-            plantSpaces.add(plant.getPosition());
-        }
+        plantSpaces.add(plant.getPosition());
         plants.remove(plant.getPosition());
     }
 
@@ -115,7 +95,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         addAnimal(animal);
 
-        notify("Animal" + animal.getAnimalName() + "was placed at " + animal.getPosition());
     }
 
 
@@ -146,7 +125,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         addAnimal(animal);
 
-        notify("Animal " + animal.getAnimalName() + " " + animal.getEnergyLevel() + " moved from " + currPosition + " to " + animal.getPosition());
     }
 
 
@@ -159,11 +137,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     protected void initialPlantGenerator(Configuration config) {
-//        for(int i = 0; i<width; i++) {
-//            for(int j = 0; j<height; j++) {
-//                plantSpaces.add(new Vector2D(i, j));
-//            }
-//        }
         Collections.shuffle(plantSpaces);
         for(int i = 0; i< config.getStartingGrassCount(); i++) {
             Vector2D v = plantSpaces.getFirst();

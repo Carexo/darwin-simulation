@@ -13,19 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EarthMapTest {
 
-//    @Test
-//    void removePlant() {
-//        Configuration config = new Configuration();
-//
-//        EarthMap map = new EarthMap(config);
-//        map.plants.forEach((key, value) -> {map.remove(value);});
-//        Vector2D v = new Vector2D(0,0);
-//        EarthPlant plant = new EarthPlant(v, false);
-//
-//
-//        assertTrue(map.plants.isEmpty());
-//    }
-
     @Test
     void updateFreePlantSpaces() {
     }
