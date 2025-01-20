@@ -68,8 +68,8 @@ public class Configuration {
         if (configuration.getStartingGrassCount() > mapSize) {
             throw new ValidationConfigurationException("Starting grass count cannot be greater than map size.");
         }
-        if (configuration.getStartingOceanCount() > mapSize) {
-            throw new ValidationConfigurationException("Starting ocean count cannot be greater than map size.");
+        if (configuration.getStartingOceanCount() > mapSize - configuration.getStartingAnimalsCount()) {
+            throw new ValidationConfigurationException("Starting ocean count cannot be greater than map size - starting animals count.");
         }
         if (configuration.getStartingOceanCount() < 0) {
             throw new ValidationConfigurationException("Starting ocean count cannot be negative.");

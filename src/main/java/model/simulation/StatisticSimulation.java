@@ -9,7 +9,8 @@ import java.util.*;
 public class StatisticSimulation {
     private final AbstractWorldMap map;
     private final Simulation simulation;
-    private final List<AbstractAnimal> diedAnimals = new ArrayList<>();
+    private int diedAnimalCount = 0;
+    private double diedAnimalLifeSpan = 0;
 
     public StatisticSimulation(Simulation simulation) {
         this.map = simulation.getMap();
@@ -50,19 +51,7 @@ public class StatisticSimulation {
     }
 
     public double getAverageDiedAnimalLifespan() {
-        int diedAnimalsCount = diedAnimals.size();
-
-        if (diedAnimalsCount == 0) {
-            return 0;
-        }
-
-        int sum = 0;
-
-        for (AbstractAnimal animal : diedAnimals) {
-            sum += animal.getAge();
-        }
-
-        return (double) sum / diedAnimalsCount;
+        return diedAnimalLifeSpan;
     }
 
     public double getAverageChildCount() {
@@ -110,7 +99,8 @@ public class StatisticSimulation {
 
 
     public void addDiedAnimal(AbstractAnimal animal) {
-        diedAnimals.add(animal);
+       diedAnimalLifeSpan = (diedAnimalCount * diedAnimalLifeSpan + animal.getAge()) / (diedAnimalCount + 1);
+       diedAnimalCount++;
     }
 
     public String getCSVHeaders() {
