@@ -6,10 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -18,6 +15,7 @@ import model.Configuration;
 import model.simulation.Simulation;
 import model.map.AbstractWorldMap;
 import util.CSVWriter;
+import util.ConfigurationWriter;
 import util.ValidationConfigurationException;
 
 import java.io.IOException;
@@ -47,7 +45,7 @@ public class ConfigurationSimulationPresenter {
     public TextField grassEnergyLevel;
 
     @FXML
-    public ComboBox animalTypeSelector;
+    public ComboBox<String> animalTypeSelector;
 
     @FXML
     public TextField startingAnimalsCount;
@@ -80,7 +78,7 @@ public class ConfigurationSimulationPresenter {
     public TextField totalSimulationDays;
 
     @FXML
-    public ComboBox mapTypeSelector;
+    public ComboBox<String> mapTypeSelector;
     @FXML
     public CheckBox csvStatisticSaving;
     @FXML
@@ -95,6 +93,31 @@ public class ConfigurationSimulationPresenter {
     public TextField waterSegments;
     @FXML
     public TextField oceanChangeRate;
+    @FXML
+    public TextField configurationName;
+    @FXML
+    public ListView<String> configurationsListView;
+
+    @FXML
+    private void initialize() {
+        try {
+            ConfigurationWriter.loadConfigurationsFromFile();
+            configurationsListView.getItems().addAll(ConfigurationWriter.getConfigurationNames());
+
+        } catch (Exception ex) {
+            notifyError("Failed to load configurations");
+            System.out.printf("Failed to load configurations with error: %s\n", ex.getMessage());
+        } finally {
+            if(configurationsListView.getItems().isEmpty()) {
+                notifyInfo("Loaded default configuration");
+                setConfigurationForm(new Configuration());
+            }
+            else {
+                setConfigurationForm(ConfigurationWriter.getConfiguration(configurationsListView.getItems().getFirst()));
+                notifyInfo("Successfully one of the configurations");
+            }
+        }
+    }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
@@ -105,7 +128,6 @@ public class ConfigurationSimulationPresenter {
 
     private Simulation getSimulation(SimulationPresenter simulationPresenter) {
         Configuration configuration = getConfiguration();
-//        Configuration configuration = new Configuration();
         Configuration.validate(configuration);
 
         AbstractWorldMap map = configuration.getSelectedMap();
@@ -193,15 +215,119 @@ public class ConfigurationSimulationPresenter {
         }
     }
 
-    public void onConfigurationSaveClick(ActionEvent actionEvent) {
+    public void onConfigurationSaveClick() {
+        if(configurationName.getText().isEmpty()) {
+            notifyError("Please enter configuration name");
+            return;
+        }
+
+        try {
+            Configuration configuration = getConfiguration();
+            Configuration.validate(configuration);
+
+            ConfigurationWriter.addConfiguration(configurationName.getText(), configuration);
+            configurationsListView.getItems().add(configurationName.getText());
+
+            ConfigurationWriter.saveConfigurationToFiles();
+
+            notifyInfo("Successfully saved configuration");
+        } catch(NumberFormatException ex) {
+            notifyError("Please enter correct data");
+        } catch(IllegalArgumentException | ValidationConfigurationException ex) {
+            notifyError(ex.getMessage());
+        } catch (IOException ex) {
+            notifyError("Failed to save configurations");
+            System.out.println("Failed to save configurations with error: " + ex.getMessage());
+        }
     }
 
-    public void onConfigurationDeleteClick(ActionEvent actionEvent) {
+    public void onConfigurationDeleteClick() {
+        if(configurationsListView.getSelectionModel().getSelectedItems().isEmpty()) {
+            notifyError("Please select configuration to delete");
+            return;
+        }
+
+        String selectedConfiguration = configurationsListView.getSelectionModel().getSelectedItems().getFirst();
+
+        try {
+            ConfigurationWriter.removeConfiguration(selectedConfiguration);
+            configurationsListView.getItems().remove(selectedConfiguration);
+
+            ConfigurationWriter.saveConfigurationToFiles();
+
+            notifyInfo("Successfully deleted configuration");
+        } catch(IllegalArgumentException ex) {
+            notifyError(ex.getMessage());
+        } catch (IOException ex) {
+            notifyError("Failed to save configurations");
+            System.out.println("Failed to save configurations with error: " + ex.getMessage());
+        }
     }
 
-    public void onConfigurationLoadClick(ActionEvent actionEvent) {
+    public void onConfigurationLoadClick() {
+        if(configurationsListView.getSelectionModel().getSelectedItems().isEmpty()) {
+            notifyError("Please select configuration to load");
+            return;
+        }
+
+        try {
+            String selectedConfiguration = configurationsListView.getSelectionModel().getSelectedItems().getFirst();
+
+            Configuration configuration = ConfigurationWriter.getConfiguration(selectedConfiguration);
+            setConfigurationForm(configuration);
+            notifyInfo("Successfully loaded configuration");
+
+        } catch (Exception ex) {
+            notifyError("Failed to load configuration");
+            System.out.printf("Failed to load configuration with error: %s\n", ex.getMessage());
+        }
     }
 
+    private void setConfigurationForm(Configuration configuration) {
+        // Map configuration
+        mapWidth.setText(String.valueOf(configuration.getMapWidth()));
+        mapHeight.setText(String.valueOf(configuration.getMapHeight()));
+        startingGrassCount.setText(String.valueOf(configuration.getStartingGrassCount()));
+        grassGrowthPerDay.setText(String.valueOf(configuration.getGrassGrowthPerDay()));
+        grassEnergyLevel.setText(String.valueOf(configuration.getGrassEnergyLevel()));
+
+        if (configuration.getMapType() == Configuration.MapType.EARTH_MAP) {
+            mapTypeSelector.setValue("Earth");
+            mapPropertiesPane.setDisable(true);
+        } else if (configuration.getMapType() == Configuration.MapType.OCEAN_MAP) {
+            mapTypeSelector.setValue("Ocean");
+            mapPropertiesPane.setDisable(false);
+            startingOceanCount.setText(String.valueOf(configuration.getStartingOceanCount()));
+            waterSegments.setText(String.valueOf(configuration.getWaterSegments()));
+            oceanChangeRate.setText(String.valueOf(configuration.getOceanChangeRate()));
+        }
+
+        // Animal configuration
+        if (configuration.getAnimalType() == Configuration.AnimalType.NORMAL) {
+            animalTypeSelector.setValue("Normal");
+            animalPropertiesPane.setDisable(true);
+        } else if (configuration.getAnimalType() == Configuration.AnimalType.AGING) {
+            animalTypeSelector.setValue("Aging");
+            animalPropertiesPane.setDisable(false);
+            chanceOfAnimalSkipMove.setText(String.valueOf(configuration.getChanceOfAnimalSkipMove()));
+        }
+
+        startingAnimalsCount.setText(String.valueOf(configuration.getStartingAnimalsCount()));
+        animalStartingEnergy.setText(String.valueOf(configuration.getAnimalStartingEnergy()));
+        animalReadyToBreedEnergyLevel.setText(String.valueOf(configuration.getAnimalReadyToBreedEnergyLevel()));
+        animalEnergyLossPerMove.setText(String.valueOf(configuration.getAnimalEnergyLossPerMove()));
+        animalEnergyGivenToChild.setText(String.valueOf(configuration.getAnimalEnergyGivenToChild()));
+
+        // Genome configuration
+        genomeLength.setText(String.valueOf(configuration.getGenomeLength()));
+        minimalMutationsCount.setText(String.valueOf(configuration.getMinimalMutationsCount()));
+        maximalMutationsCount.setText(String.valueOf(configuration.getMaximalMutationsCount()));
+
+        // Simulation configuration
+        simulationSpeed.setText(String.valueOf(configuration.getSimulationSpeed()));
+        totalSimulationDays.setText(String.valueOf(configuration.getTotalSimulationDays()));
+        csvStatisticSaving.setSelected(configuration.isCsvStatisticSaving());
+    }
 
     private Configuration getConfiguration() throws NumberFormatException {
         Configuration configuration = new Configuration();
