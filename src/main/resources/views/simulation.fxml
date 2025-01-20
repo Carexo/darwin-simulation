@@ -16,7 +16,7 @@
             <fx:include fx:id="detailsSimulation" source="detailsSimulation.fxml" />
            <VBox alignment="CENTER" spacing="10">
                    <Button fx:id="showPopularGenome" disable="true" onAction="#onShowPopularGenomeClick" prefHeight="55.0" prefWidth="192.0" text="Show animals with popular genome" textAlignment="CENTER" wrapText="true" />
-                   <Button fx:id="showPlantsPosition" disable="true" onAction="#onShowPlantsPreferredPositionClick" prefWidth="Infinity" text="Show plants preferred positions" textAlignment="CENTER" wrapText="true" />
+                   <Button fx:id="showPlantsPosition" visible="false" disable="true" onAction="#onShowPlantsPreferredPositionClick" prefWidth="Infinity" text="Show plants preferred positions" textAlignment="CENTER" wrapText="true" />
            </VBox>
        </VBox>
 

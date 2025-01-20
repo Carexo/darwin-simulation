@@ -7,6 +7,7 @@ import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import model.Configuration;
 import model.simulation.Simulation;
 import model.elements.Vector2D;
 import model.elements.WorldElement;
@@ -16,6 +17,7 @@ import presenter.boxes.AxisLabel;
 import presenter.boxes.WorldElementBoxFactory;
 
 import java.util.HashSet;
+import java.util.Set;
 
 
 public class SimulationPresenter {
@@ -37,13 +39,17 @@ public class SimulationPresenter {
     private InformationAnimal informationAnimalController;
     @FXML
     private DetailsSimulation detailsSimulationController;
+
     private boolean showAnimalsWithPopularGenome = false;
+    private Set<AbstractAnimal> animalsWithPopularGenome = new HashSet<>();
+
+    private boolean showPlantsPreferredPositions = false;
+    private Set<Vector2D> plantsPrefferdPositions = new HashSet<>();
 
     private AbstractWorldMap map;
     private Simulation simulation;
     private WorldElementBoxFactory worldElementBoxFactory;
     private int cellSize = 30;
-    private HashSet<AbstractAnimal> animalsWithPopularGenome = new HashSet<>();
 
     public void setWorldMap(AbstractWorldMap map) {
         this.map = map;
@@ -104,7 +110,14 @@ public class SimulationPresenter {
                     }
 
                 } else {
-                    mapGrid.add(new Label(" "), i + 1, map.getHeight() - j);
+
+                    Pane pane = new Pane();
+
+                    if (showPlantsPreferredPositions && plantsPrefferdPositions.contains(position)) {
+                        pane.getStyleClass().add("position-plant-preferred");
+                    }
+
+                    mapGrid.add(pane, i + 1, map.getHeight() - j);
                 }
 
                 GridPane.setHalignment(mapGrid.getChildren().getLast(), HPos.CENTER);
@@ -139,6 +152,10 @@ public class SimulationPresenter {
 
         detailsSimulationController.setStatisticSimulation(simulation.getStatisticSimulation());
 
+        if (simulation.getMapType() == Configuration.MapType.EARTH_MAP) {
+            setVisibleShowPlantsPreferredPositionsButton();
+        }
+
         simulation.subscribe((simulation1) -> informationAnimalController.updateInformation(), Simulation.SimulationEventType.CHANGE);
         simulation.subscribe((simulation1) -> detailsSimulationController.onUpdateDetails(), Simulation.SimulationEventType.CHANGE);
         simulation.subscribe((simulation1) -> mapChanged(), Simulation.SimulationEventType.CHANGE);
@@ -154,6 +171,7 @@ public class SimulationPresenter {
             showPopularGenome.setDisable(true);
             showPlantsPosition.setDisable(true);
             showAnimalsWithPopularGenome = false;
+            showPlantsPreferredPositions = false;
         }, Simulation.SimulationEventType.RESUME);
     }
 
@@ -183,6 +201,7 @@ public class SimulationPresenter {
             informationAnimalController.unselectAnimal();
            animalsWithPopularGenome = simulation.getStatisticSimulation().getAnimalsWithMostPopularGenome();
         }
+
         mapChanged();
     }
 
@@ -190,8 +209,15 @@ public class SimulationPresenter {
         showAnimalsWithPopularGenome = false;
     }
 
+    public void setVisibleShowPlantsPreferredPositionsButton() {
+        showPlantsPosition.setVisible(true);
+    }
+
     public void onShowPlantsPreferredPositionClick() {
-//        detailsSimulationController.showPlantsPreferredPosition();
+        showPlantsPreferredPositions = !showPlantsPreferredPositions;
+        plantsPrefferdPositions = simulation.getPlantsPreferredPosition();
+
+        mapChanged();
     }
 
     public void changeSimulationInfo(String message) {

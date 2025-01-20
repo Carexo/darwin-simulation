@@ -127,7 +127,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     }
 
-
     public void updateFreePlantSpaces() {
         this.freePlantSpaces = this.width * this.height - this.plants.size();
     }
@@ -145,6 +144,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
 
     }
+
+
 
     public abstract void growPlants();
 
@@ -164,6 +165,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public int getWidth() {
         return width;
     }
+
 
 
 }

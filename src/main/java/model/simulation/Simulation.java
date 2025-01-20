@@ -7,6 +7,7 @@ import model.elements.animal.AbstractAnimal;
 import model.elements.animal.AgingAnimal;
 import model.elements.animal.Animal;
 import model.map.AbstractWorldMap;
+import model.map.EarthMap;
 import model.map.TidesMap;
 import util.AnimalUtils;
 import util.RandomPositionGenerator;
@@ -21,6 +22,7 @@ public class Simulation implements Runnable {
     private final StatisticSimulation statisticSimulation;
     private final Configuration configuration;
     private final Map<SimulationEventType, List<SimulationChangeListener>> listeners = new HashMap<>();
+    private final Configuration.MapType mapType;
 
     public enum SimulationEventType {
         CHANGE,
@@ -32,6 +34,7 @@ public class Simulation implements Runnable {
     public Simulation(AbstractWorldMap map, Configuration configuration) {
         this.map = map;
         this.configuration = configuration;
+        this.mapType = configuration.getMapType();
         RandomPositionGenerator randomPositionGenerator = null;
         this.statisticSimulation = new StatisticSimulation(this);
 
@@ -184,11 +187,23 @@ public class Simulation implements Runnable {
         return map;
     }
 
+    public Configuration.MapType getMapType() {
+        return mapType;
+    }
+
     public int getDayNumber() {
         return dayNumber;
     }
 
     public StatisticSimulation getStatisticSimulation() {
         return statisticSimulation;
+    }
+
+    public Set<Vector2D> getPlantsPreferredPosition() {
+        if (map instanceof EarthMap earthMap) {
+            return earthMap.getPreferredPlantPositions();
+        }
+
+        return new HashSet<>();
     }
 }

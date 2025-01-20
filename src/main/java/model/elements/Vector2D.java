@@ -1,5 +1,7 @@
 package model.elements;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public record Vector2D(int x, int y) {
@@ -47,5 +49,18 @@ public record Vector2D(int x, int y) {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+    public List<Vector2D> getNeighbors() {
+        List<Vector2D> neighbors = new ArrayList<>();
+        neighbors.add(new Vector2D(x - 1, y));
+        neighbors.add(new Vector2D(x + 1, y));
+        neighbors.add(new Vector2D(x, y - 1));
+        neighbors.add(new Vector2D(x, y + 1));
+        neighbors.add(new Vector2D(x - 1, y - 1));
+        neighbors.add(new Vector2D(x + 1, y + 1));
+        neighbors.add(new Vector2D(x - 1, y + 1));
+        neighbors.add(new Vector2D(x + 1, y - 1));
+        return neighbors;
     }
 }

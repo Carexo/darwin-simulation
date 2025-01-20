@@ -78,6 +78,11 @@ public class EarthMap extends AbstractWorldMap {
 
     }
 
+    public Set<Vector2D> getPreferredPlantPositions() {
+        return new HashSet<>(preferable);
+    }
+
+
     @Override
     public void updateFreePlantSpaces() {
         this.freePlantSpaces = preferable.size() + nonPreferable.size();
