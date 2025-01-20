@@ -81,4 +81,5 @@ class EarthMapTest {
         Animal B = new Animal(v, 10, config);
         assertTrue(map.canMoveTo(new Vector2D(0,0)));
     }
+
 }

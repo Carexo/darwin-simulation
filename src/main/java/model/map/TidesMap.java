@@ -88,7 +88,7 @@ public class TidesMap extends AbstractWorldMap {
             }
         }
     }
-    private void checkTides(Vector2D pos) {
+    void checkTides(Vector2D pos) {
         int[] x_change = {1, 1, 0, -1, -1, -1, 0, 1};
         int[] y_change = {0, -1, -1, -1, 0, 1, 1, 1};
 
@@ -151,7 +151,7 @@ public class TidesMap extends AbstractWorldMap {
         return waterMap;
     }
 
-    private void genPlantSpaces() {
+    void genPlantSpaces() {
         for(int i = 0; i<width; i++){
             for(int j = 0; j<height; j++){
                 if(!waterMap.containsKey(new Vector2D(i,j)) && !tideMap.containsKey(new Vector2D(i,j))) {
