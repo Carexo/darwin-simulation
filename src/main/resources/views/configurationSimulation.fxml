@@ -23,7 +23,7 @@
                     <Label styleClass="configuration-title" text="Map settings" />
                     <VBox spacing="5.0">
                         <Label text="Map type:" />
-                        <ComboBox fx:id="mapTypeSelector" maxWidth="1.7976931348623157E308" onAction="#onMapSelected" value="Earth">
+                        <ComboBox fx:id="mapTypeSelector" onAction="#onMapSelected" maxWidth="Infinity" value="Earth">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Ocean" />
@@ -59,7 +59,7 @@
 
                     <VBox spacing="5.0">
                         <Label text="Animal type:" />
-                        <ComboBox fx:id="animalTypeSelector" maxWidth="1.7976931348623157E308" onAction="#onAnimalSelect" value="Normal">
+                        <ComboBox fx:id="animalTypeSelector" onAction="#onAnimalSelect" maxWidth="Infinity" value="Normal">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Normal" />
@@ -107,22 +107,21 @@
                 </VBox>
                 <VBox spacing="15.0">
                     <Label text="Configuration settings:" VBox.vgrow="ALWAYS" />
-<!--                    <Label alignment="CENTER" text="Configuration name"/>-->
-<!--                    <TextField fx:id="configurationName"/>-->
-<!--                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
-<!--                            onAction="#onConfigurationSaveClick" text="Save configuration"/>-->
-<!--                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
-<!--                            onAction="#onConfigurationDeleteClick" text="Delete selected configuration"/>-->
-<!--                    <ListView fx:id="configurationsListView"/>-->
-<!--                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
-<!--                            onAction="#onConfigurationLoadClick" text="Load selected configuration"/>-->
-                    <CheckBox fx:id="csvStatisticSaving" mnemonicParsing="false" text="Enable simulation statistics save to CSV" />
+                    <VBox spacing="5.0">
+                        <Label alignment="CENTER" text="Configuration name" />
+                        <TextField fx:id="configurationName" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#onConfigurationSaveClick" text="Save configuration" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#onConfigurationDeleteClick" text="Delete selected configuration" />
+                        <ListView fx:id="configurationsListView" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#onConfigurationLoadClick" text="Load selected configuration" />
+                        <CheckBox fx:id="csvStatisticSaving" mnemonicParsing="false" text="Enable simulation statistics save to CSV" />
+                    </VBox>
                 </VBox>
             </HBox>
         </VBox>
     </center>
    <bottom>
-      <HBox alignment="BOTTOM_RIGHT" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
          <children>
                    <Button alignment="CENTER" minWidth="150.0" mnemonicParsing="false" onAction="#onSimulationStartClicked" text="Start" />
          </children>
