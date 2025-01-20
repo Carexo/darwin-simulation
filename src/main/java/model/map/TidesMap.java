@@ -146,9 +146,7 @@ public class TidesMap extends AbstractWorldMap {
                 )
         );
     }
-//    public void drownAnimals() {
-//        super.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(waterMap.containsKey(v)){animal.die(0);}}));
-//    }
+
     public Map<Vector2D, Water> getWaterMap() {
         return waterMap;
     }
