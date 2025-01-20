@@ -63,7 +63,6 @@ class TidesMapTest {
         Configuration config = createConfig(5, 3);
         TidesMap tidesMap = new TidesMap(config);
 
-        // Check that plant spaces are correctly generated
         tidesMap.genPlantSpaces();
         for (Map.Entry<Vector2D, Water> entry : tidesMap.getWaterMap().entrySet()) {
             assertFalse(tidesMap.plantSpaces.contains(entry.getKey()));
