@@ -15,6 +15,7 @@ Darwin Simulation is a Java-based application that simulates the evolution of an
 ## Technologies Used
 - Java
 - JavaFX for the user interface
+- Gson for JSON serialization
 - Gradle for build automation
 
 ## Getting Started
