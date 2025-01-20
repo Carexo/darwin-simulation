@@ -14,7 +14,7 @@
 }
 
 .selected-animal {
-    -fx-background-color: yellow;
+    -fx-background-color: #ffeb3b;
 }
 
 .popular-genome {
@@ -23,7 +23,7 @@
 }
 
 .rectangle-border {
-    -fx-stroke: yellow;
+    -fx-stroke: #ffeb3b;
     -fx-stroke-width: 1;
 }
 
@@ -32,4 +32,8 @@
     -fx-alignment: center;
     -fx-border-color: #ac9333;
     -fx-border-width: 1px;
+}
+
+.position-plant-preferred {
+    -fx-background-color: #ffeb3b;
 }
