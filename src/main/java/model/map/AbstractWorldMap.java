@@ -9,7 +9,6 @@ import util.MapVisualizer;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
@@ -18,7 +17,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Map<Vector2D, Plant> plants = new ConcurrentHashMap<>();
     protected final int width;
     protected final int height;
-    List<MapChangeListener> listeners = new ArrayList<>();
     private final Boundary boundary;
     protected int grassCount;
     private final Map<Vector2D, List<AbstractAnimal>> animals = new ConcurrentHashMap<>();
@@ -34,8 +32,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         grassCount = config.getStartingGrassCount();
         grassGrowthPerDay = config.getGrassGrowthPerDay();
-
-
     }
 
     private void addAnimal(AbstractAnimal animal) {
@@ -117,14 +113,11 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void move(AbstractAnimal animal) {
-        Vector2D currPosition = animal.getPosition();
-
         removeAnimal(animal);
 
         animal.move(this);
 
         addAnimal(animal);
-
     }
 
     public void updateFreePlantSpaces() {
@@ -144,8 +137,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
 
     }
-
-
 
     public abstract void growPlants();
 

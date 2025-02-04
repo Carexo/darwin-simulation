@@ -2,7 +2,6 @@ package presenter;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import model.elements.animal.Genome;
 import model.simulation.StatisticSimulation;

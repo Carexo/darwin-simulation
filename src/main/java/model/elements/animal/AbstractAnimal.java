@@ -14,7 +14,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import static java.lang.Math.max;
 
 public abstract class AbstractAnimal implements WorldElement {
-    private final String animalName = String.format("%s",(char) ThreadLocalRandom.current().nextInt(65, 91));
     private Vector2D position;
     private MapDirection direction;
     private int energyLevel;
@@ -40,10 +39,6 @@ public abstract class AbstractAnimal implements WorldElement {
         this.genome = genome;
 
         placeAnimal(position, energyLevel);
-    }
-
-    public String toString() {
-        return animalName;
     }
 
     public void placeAnimal(Vector2D position, int energyLevel) {
@@ -77,7 +72,11 @@ public abstract class AbstractAnimal implements WorldElement {
         energyLevel -= configuration.getAnimalEnergyGivenToChild();
         other.energyLevel -= configuration.getAnimalEnergyGivenToChild();
 
-        AbstractAnimal child = new Animal(position, configuration.getAnimalEnergyGivenToChild(), childGenome, configuration);
+        AbstractAnimal child =  switch (configuration.getAnimalType()) {
+            case Configuration.AnimalType.NORMAL -> new Animal(position, configuration.getAnimalEnergyGivenToChild(), childGenome, configuration);
+            case Configuration.AnimalType.AGING -> new AgingAnimal(position, configuration.getAnimalEnergyGivenToChild(), childGenome, configuration);
+        };
+
         children.add(child);
 
         return child;
@@ -130,10 +129,6 @@ public abstract class AbstractAnimal implements WorldElement {
         return energyLevel > configuration.getAnimalReadyToBreedEnergyLevel();
     }
 
-    @Override
-    public boolean isAt(Vector2D position) {
-        return this.position.equals(position);
-    }
 
     @Override
     public Vector2D getPosition() {
@@ -154,10 +149,6 @@ public abstract class AbstractAnimal implements WorldElement {
 
     public int getEnergyLevel() {
         return energyLevel;
-    }
-
-    public String getAnimalName() {
-        return animalName;
     }
 
     public int getAge() {

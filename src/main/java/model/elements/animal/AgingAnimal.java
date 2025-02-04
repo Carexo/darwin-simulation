@@ -27,9 +27,4 @@ public class AgingAnimal extends AbstractAnimal {
 
         super.move(moveValidator);
     }
-
-    @Override
-    public String toString() {
-        return getAnimalName() + "_";
-    }
 }

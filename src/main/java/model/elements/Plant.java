@@ -15,16 +15,6 @@ public class Plant implements WorldElement {
     }
 
     @Override
-    public String toString() {
-        return "*";
-    }
-
-    @Override
-    public boolean isAt(Vector2D positionCheck) {
-        return (position.equals(positionCheck));
-    }
-
-    @Override
     public String getImageSource() {
         return "images/plant.png";
     }
