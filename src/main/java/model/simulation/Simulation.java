@@ -35,16 +35,16 @@ public class Simulation implements Runnable {
         this.map = map;
         this.configuration = configuration;
         this.mapType = configuration.getMapType();
-        RandomPositionGenerator randomPositionGenerator = null;
+        RandomPositionGenerator randomPositionGenerator;
         this.statisticSimulation = new StatisticSimulation(this);
 
         if (map instanceof TidesMap) {
-            List<Vector2D> keyList = new ArrayList<Vector2D>(((TidesMap) map).getWaterMap().keySet());
+            List<Vector2D> keyList = new ArrayList<>(((TidesMap) map).getWater().keySet());
             randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount(), keyList);
-
         } else {
             randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount());
         }
+
         for (Vector2D position: randomPositionGenerator) {
             if (configuration.getAnimalType() == Configuration.AnimalType.AGING) {
                 AbstractAnimal animal = new AgingAnimal(position, configuration.getAnimalStartingEnergy(), configuration);
@@ -162,7 +162,7 @@ public class Simulation implements Runnable {
         }
     }
     public void drownAnimals() {
-        map.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(((TidesMap)map).getWaterMap().containsKey(v)){animal.die(0);}}));
+        map.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(((TidesMap)map).getWater().containsKey(v)){animal.die(0);}}));
     }
 
     public void pause() {

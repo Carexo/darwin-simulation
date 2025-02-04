@@ -31,6 +31,9 @@ public class RandomPositionGenerator implements Iterable<Vector2D> {
         this.exclude = exclude;
 
         this.positions = generateAllPosition();
+
+        System.out.println("Exclude: " + exclude);
+        System.out.println("Positions: " + positions);
         Collections.shuffle(positions);
     }
 
