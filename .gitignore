@@ -3,6 +3,11 @@
 
 .DS_Store
 simulation_logs/**
+src/main/resources/configurations/*
+
+!src/main/resources/configurations/EarthMap.json
+!src/main/resources/configurations/OceanMap.json
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
