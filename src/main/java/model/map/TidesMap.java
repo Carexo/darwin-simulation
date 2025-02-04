@@ -18,8 +18,8 @@ public class TidesMap extends AbstractWorldMap {
 
     private final int startingOceanCount;
 
-    Map<Vector2D, Water> waterMap = new HashMap<Vector2D, Water>();
-    Map<Vector2D, Water> tideMap = new HashMap<Vector2D, Water>();
+    Map<Vector2D, Water> waterMap = new HashMap<>();
+    Map<Vector2D, Water> tideMap = new HashMap<>();
 
     public TidesMap(Configuration config) {
         super(config);
@@ -101,7 +101,7 @@ public class TidesMap extends AbstractWorldMap {
     }
 
     public void switchOceanState() {
-        if (this.oceanState == false) {
+        if (!this.oceanState) {
             waterMap.putAll(tideMap);
             this.oceanState = true;
         } else {

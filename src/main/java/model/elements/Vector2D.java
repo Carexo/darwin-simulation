@@ -22,21 +22,6 @@ public record Vector2D(int x, int y) {
         return new Vector2D(x + other.x, y + other.y);
     }
 
-    public Vector2D subtract(Vector2D other) {
-        return new Vector2D(x - other.x, y - other.y);
-    }
-
-    public Vector2D upperRight(Vector2D other) {
-        return new Vector2D(Math.max(x, other.x), Math.max(y, other.y));
-    }
-
-    public Vector2D lowerLeft(Vector2D other) {
-        return new Vector2D(Math.min(x, other.x), Math.min(y, other.y));
-    }
-
-    public Vector2D opposite() {
-        return new Vector2D(-x, -y);
-    }
 
     @Override
     public boolean equals(Object o) {

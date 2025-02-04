@@ -5,7 +5,6 @@ import model.elements.Vector2D;
 import model.elements.WorldElement;
 import model.elements.animal.AbstractAnimal;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
