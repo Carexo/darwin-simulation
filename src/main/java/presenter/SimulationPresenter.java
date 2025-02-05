@@ -95,6 +95,7 @@ public class SimulationPresenter {
 
                 if (map.isOccupied(position)) {
                     WorldElement element = map.objectsAt(position).toList().getFirst();
+//                    System.out.println(element);
 
                     if (element instanceof AbstractAnimal animal) {
                         boolean isTracked = informationAnimalController.getSelectedAnimal().map(animal::equals).orElse(false) || (showAnimalsWithPopularGenome && animalsWithPopularGenome.contains(animal));

@@ -81,6 +81,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public boolean isOccupied(Vector2D position) {
         return objectsAt(position).findAny().isPresent();
+
     }
 
     @Override
@@ -127,6 +128,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return this.freePlantSpaces;
     }
 
+
     protected void initialPlantGenerator(Configuration config) {
         Collections.shuffle(plantSpaces);
         for(int i = 0; i< config.getStartingGrassCount(); i++) {
@@ -155,7 +157,4 @@ public abstract class AbstractWorldMap implements WorldMap {
     public int getWidth() {
         return width;
     }
-
-
-
 }

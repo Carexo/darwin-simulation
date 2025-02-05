@@ -27,7 +27,6 @@ public class Configuration {
     // ocean map
     private int startingOceanCount = 4;
     private int oceanChangeRate = 10;
-    private int waterSegments = 3;
 
     // animal
     private int startingAnimalsCount = 10;
@@ -79,9 +78,6 @@ public class Configuration {
         }
         if (configuration.getGrassEnergyLevel() < 0) {
             throw new ValidationConfigurationException("Grass energy level cannot be negative.");
-        }
-        if (configuration.getWaterSegments() < 0) {
-            throw new ValidationConfigurationException("Water segments cannot be negative.");
         }
         if (configuration.getOceanChangeRate() < 0) {
             throw new ValidationConfigurationException("Ocean change rate cannot be negative.");
@@ -291,14 +287,6 @@ public class Configuration {
 
     public void setStartingOceanCount(int startingOceanCount) {
         this.startingOceanCount = startingOceanCount;
-    }
-
-    public int getWaterSegments() {
-        return waterSegments;
-    }
-
-    public void setWaterSegments(int waterSegments) {
-        this.waterSegments = waterSegments;
     }
 
     public int getOceanChangeRate() {

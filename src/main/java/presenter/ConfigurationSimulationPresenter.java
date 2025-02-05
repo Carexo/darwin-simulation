@@ -90,8 +90,6 @@ public class ConfigurationSimulationPresenter {
     @FXML
     public TextField startingOceanCount;
     @FXML
-    public TextField waterSegments;
-    @FXML
     public TextField oceanChangeRate;
     @FXML
     public TextField configurationName;
@@ -298,7 +296,6 @@ public class ConfigurationSimulationPresenter {
             mapTypeSelector.setValue("Ocean");
             mapPropertiesPane.setDisable(false);
             startingOceanCount.setText(String.valueOf(configuration.getStartingOceanCount()));
-            waterSegments.setText(String.valueOf(configuration.getWaterSegments()));
             oceanChangeRate.setText(String.valueOf(configuration.getOceanChangeRate()));
         }
 
@@ -345,7 +342,6 @@ public class ConfigurationSimulationPresenter {
         } else if (mapTypeSelector.getValue().equals("Ocean")) {
             configuration.setMapType(Configuration.MapType.OCEAN_MAP);
             configuration.setStartingOceanCount(Integer.parseInt(startingOceanCount.getText()));
-            configuration.setWaterSegments(Integer.parseInt(waterSegments.getText()));
             configuration.setOceanChangeRate(Integer.parseInt(oceanChangeRate.getText()));
         }
 

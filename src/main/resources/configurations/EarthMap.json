@@ -7,7 +7,6 @@
   "grassEnergyLevel": 10,
   "startingOceanCount": 4,
   "oceanChangeRate": 10,
-  "waterSegments": 3,
   "startingAnimalsCount": 10,
   "animalStartingEnergy": 106,
   "animalEnergyLossPerMove": 1,
