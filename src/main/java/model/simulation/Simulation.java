@@ -39,7 +39,7 @@ public class Simulation implements Runnable {
         this.statisticSimulation = new StatisticSimulation(this);
 
         if (map instanceof TidesMap) {
-            List<Vector2D> keyList = new ArrayList<>(((TidesMap) map).getWater().keySet());
+            List<Vector2D> keyList = ((TidesMap) map).getWaterPositionList();
             randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount(), keyList);
         } else {
             randomPositionGenerator = new RandomPositionGenerator(configuration.getMapWidth(), configuration.getMapHeight(), configuration.getStartingAnimalsCount());
@@ -89,6 +89,7 @@ public class Simulation implements Runnable {
                         ((TidesMap) map).switchOceanState();
                     }
                 }
+
                 removeDeathAnimal();
                 moveAnimals();
                 animalEats();
@@ -157,12 +158,15 @@ public class Simulation implements Runnable {
                 AbstractAnimal parent2 = canBreadAnimals.get(i - 1);
 
                 AbstractAnimal child = parent1.reproduce(parent2);
+
+
+
                 map.place(child);
             }
         }
     }
     public void drownAnimals() {
-        map.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(((TidesMap)map).getWater().containsKey(v)){animal.die(0);}}));
+        map.getAnimals().forEach((v, animalList) -> animalList.forEach(animal -> {if(((TidesMap)map).getWaterPositionList().contains(v)){animal.die(dayNumber);}}));
     }
 
     public void pause() {

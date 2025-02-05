@@ -5,17 +5,16 @@ import model.elements.Plant;
 import model.elements.Vector2D;
 import model.elements.Water;
 import model.elements.WorldElement;
+import util.RandomPositionGenerator;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 import static java.lang.Math.min;
 
 public class TidesMap extends AbstractWorldMap {
-    private final int waterSegments;
-    private boolean oceanState;
+    private boolean inflow;
 
     private final int startingOceanCount;
 
@@ -25,18 +24,18 @@ public class TidesMap extends AbstractWorldMap {
     public TidesMap(Configuration config) {
         super(config);
         this.startingOceanCount = config.getStartingOceanCount();
-        this.waterSegments = config.getWaterSegments();
+
         {
             try {
                 generateOcean();
-                water.forEach((key, water) -> checkTides(key));
-
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Ocean generation failed");
             }
         }
-        this.oceanState = false;
+
+        this.inflow = false;
+
         try {
             genPlantSpaces();
             super.initialPlantGenerator(config);
@@ -46,71 +45,24 @@ public class TidesMap extends AbstractWorldMap {
     }
 
     private void generateOcean() {
-        List<Vector2D> tempList = new ArrayList<Vector2D>();
-        List<Vector2D> freeSlots = new ArrayList<>();
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(width, height, startingOceanCount);
 
-        for (int i = 0; i<width;i++){
-            for(int j=0;j<height;j++){
-                tempList.add(new Vector2D(i,j));
+        for (Vector2D position : randomPositionGenerator) {
+            water.put(position, new Water(position));
+
+            List<Vector2D> neighbours = position.getNeighbors();
+
+            for (Vector2D neighbour : neighbours) {
+                if (this.getMapBoundary().inBounds(neighbour) && !water.containsKey(neighbour)) {
+                    tides.put(neighbour, new Water(neighbour));
+                }
             }
-        }
 
-        Collections.shuffle(tempList);
-
-        for (int i = 0; i < min(waterSegments, startingOceanCount); i++) {
-            water.put(tempList.get(i), new Water(tempList.get(i)));
-            newFreeSlots(freeSlots, tempList.get(i));
-        }
-
-
-        for (int i = 0; i < this.startingOceanCount - waterSegments; i++) {
-            int index;
-            if (freeSlots.isEmpty()) {
-                index = 0;
-            }else {
-                index = ThreadLocalRandom.current().nextInt(freeSlots.size());
-            }
-            Vector2D v = freeSlots.get(index);
-            water.put(v, new Water(v));
-            freeSlots.remove(index);
-            newFreeSlots(freeSlots, v);
-
-        }
-
-    }
-
-    private void newFreeSlots(List<Vector2D> freeSlots, Vector2D pos) {
-        int[] x_change = {1, 1, 0, -1, -1, -1, 0, 1};
-        int[] y_change = {0, -1, -1, -1, 0, 1, 1, 1};
-
-        for (int i = 0; i < 8; i++) {
-            Vector2D newPos = new Vector2D(pos.x() + x_change[i], pos.y() + y_change[i]);
-            if (this.getMapBoundary().inBounds(newPos) && !freeSlots.contains(newPos) && !water.containsKey(newPos)) {
-                freeSlots.add(newPos);
-            }
-        }
-    }
-    void checkTides(Vector2D pos) {
-        int[] x_change = {1, 1, 0, -1, -1, -1, 0, 1};
-        int[] y_change = {0, -1, -1, -1, 0, 1, 1, 1};
-
-        for (int i = 0; i < 8; i++) {
-            Vector2D newPos = new Vector2D(pos.x() + x_change[i], pos.y() + y_change[i]);
-            if (this.getMapBoundary().inBounds(newPos) && !tides.containsKey(newPos) && !water.containsKey(newPos)) {
-                tides.put(newPos, new Water(newPos));
-            }
         }
     }
 
     public void switchOceanState() {
-        if (!this.oceanState) {
-            water.putAll(tides);
-            this.oceanState = true;
-        } else {
-            tides.forEach((key, value) -> water.remove(key));
-            this.oceanState = false;
-        }
-
+        this.inflow = !this.inflow;
     }
 
     @Override
@@ -127,12 +79,13 @@ public class TidesMap extends AbstractWorldMap {
         return !water.containsKey(position) && getMapBoundary().inBounds(position);
     }
 
-    public boolean getOceanState() {
-        return oceanState;
+    public boolean getInflow() {
+        return inflow;
     }
 
     @Override
     public Stream<WorldElement> objectsAt(Vector2D position) {
+
         return Stream.concat(
                 super.getAnimals().keySet().stream()
                         .filter(position::equals)
@@ -142,9 +95,7 @@ public class TidesMap extends AbstractWorldMap {
                         plants.keySet().stream()
                                 .filter(position::equals)
                                 .map(plants::get),
-                        water.keySet().stream()
-                                .filter(position::equals)
-                                .map(water::get)
+                        getWaters().keySet().stream().filter(position::equals).map(getWaters()::get)
                 )
         );
     }
@@ -159,8 +110,18 @@ public class TidesMap extends AbstractWorldMap {
         }
     }
 
-    public ConcurrentHashMap<Vector2D, Water> getWater() {
-        return water;
+    public List<Vector2D> getWaterPositionList() {
+        return getWaters().keySet().stream().toList();
+    }
+
+    private HashMap<Vector2D, Water> getWaters() {
+        HashMap<Vector2D, Water> waters = new HashMap<>(water);
+
+        if (inflow) {
+            waters.putAll(tides);
+        }
+
+        return waters;
     }
 
 }

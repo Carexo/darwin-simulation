@@ -45,8 +45,6 @@
                             <VBox>
                                 <Label text="Starting ocean count:" />
                                 <TextField fx:id="startingOceanCount" />
-                                <Label text="Water segments:" />
-                                <TextField fx:id="waterSegments" />
                                 <Label text="Ocean change rate: (how many days to change)" />
                                 <TextField fx:id="oceanChangeRate" />
                             </VBox>
